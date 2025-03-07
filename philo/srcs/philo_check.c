@@ -1,24 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstiter_bonus.c                                 :+:      :+:    :+:   */
+/*   philo_check.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/19 16:51:47 by ifounas           #+#    #+#             */
-/*   Updated: 2024/11/20 14:50:55 by ifounas          ###   ########.fr       */
+/*   Created: 2025/03/07 15:11:25 by ifounas           #+#    #+#             */
+/*   Updated: 2025/03/07 15:11:57 by ifounas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+# include "philo.h"
 
-void	ft_lstiter(t_list *lst, void (*f)(void *))
+void    check_args(int args)
 {
-	if (f == NULL)
-		return ;
-	while (lst)
-	{
-		f(lst->content);
-		lst = lst->next;
-	}
+    if (args != 5 && args != 6)
+    {
+        printf("the program require 4 arguments\n or 5");
+        exit (1);        
+    }
 }

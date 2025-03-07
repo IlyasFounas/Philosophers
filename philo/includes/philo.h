@@ -1,27 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.h                                        :+:      :+:    :+:   */
+/*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/26 11:40:35 by ifounas           #+#    #+#             */
-/*   Updated: 2025/02/24 15:07:12 by ifounas          ###   ########.fr       */
+/*   Created: 2025/03/03 16:45:33 by ifounas           #+#    #+#             */
+/*   Updated: 2025/03/07 15:12:13 by ifounas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_PRINTF_H
+#ifndef PIPEX_H
+# define PIPEX_H
 
-# define FT_PRINTF_H
-
+# include <fcntl.h>
 # include <limits.h>
-# include <stdarg.h>
-# include <unistd.h>
+# include <pthread.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <string.h>
+# include <sys/time.h>
+# include <sys/types.h>
+# include <sys/wait.h>
 
-int		ft_printf(const char *f, ...);
-int		ft_putchar_printf(char c);
-int		ft_putstr_printf(char *s);
-size_t	ft_strlen_printf(const char *s);
-void	ft_putnbr_printf(int n, int *counter);
+typedef struct s_philo
+{
+	int		nb_philo;
+	int		death;
+	int		*forks;
+}			t_philo;
+
+// philo check
+void		check_args(int args);
+
+// philo_utils
+long int	ft_atoi_error(const char *nptr);
 
 #endif
