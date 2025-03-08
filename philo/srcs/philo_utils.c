@@ -6,13 +6,13 @@
 /*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 14:03:01 by ifounas           #+#    #+#             */
-/*   Updated: 2025/03/07 14:04:34 by ifounas          ###   ########.fr       */
+/*   Updated: 2025/03/08 14:29:39 by ifounas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "philo.h"
 
-static int	ft_isdigit(int c)
+static int	ft_isdigit_philo(int c)
 {
 	if (c >= 48 && c <= 57)
 		return (1);
@@ -36,7 +36,7 @@ static int	ft_verif(const char *s)
 
 	i = -1;
 	while (s[++i])
-		if (ft_isdigit(s[i]) != 1 && s[i] != '+' && s[i] != '-')
+		if (ft_isdigit_philo(s[i]) != 1 && s[i] != '+' && s[i] != '-')
 			return (0);
 	return (1);
 }

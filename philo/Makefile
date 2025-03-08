@@ -1,7 +1,8 @@
 NAME    = philo
-SRC     = srcs/philo.c \
-		  srcs/philo_check.c \
-		  srcs/philo_utils.c
+SRC     = srcs/philo_check.c \
+		  srcs/philo_init.c \
+		  srcs/philo_utils.c \
+		  srcs/philo.c
 
 MAKEFLAGS += --no-print-directory
 
