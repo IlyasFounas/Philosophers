@@ -6,11 +6,11 @@
 /*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 14:03:01 by ifounas           #+#    #+#             */
-/*   Updated: 2025/03/08 14:29:39 by ifounas          ###   ########.fr       */
+/*   Updated: 2025/03/10 12:47:52 by ifounas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "philo.h"
+#include "philo.h"
 
 static int	ft_isdigit_philo(int c)
 {
