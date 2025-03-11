@@ -1,9 +1,9 @@
 NAME    = philo
-SRC     = srcs/philo_check.c \
+SRC     = srcs/philo_atoi.c \
+		  srcs/philo_check.c \
 		  srcs/philo_free.c \
 		  srcs/philo_init.c \
 		  srcs/philo_manage.c \
-		  srcs/philo_utils.c \
 		  srcs/philo.c
 
 MAKEFLAGS += --no-print-directory

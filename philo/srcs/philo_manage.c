@@ -6,7 +6,7 @@
 /*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 12:42:12 by ifounas           #+#    #+#             */
-/*   Updated: 2025/03/10 17:06:52 by ifounas          ###   ########.fr       */
+/*   Updated: 2025/03/11 14:52:30 by ifounas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,38 @@
 
 void	*manage_threads(void *arg)
 {
-	static int	i = 0;
-	t_philo *philo = (t_philo *)arg;
+	int				inner_while;
+	int				y;
+	int				i;
+	t_philo_thread	*thread;
+	long int		start;
+	long int		now;
 
-    pthread_mutex_lock(&philo->forks[i]);
-	i++;
-	printf("philo %d have eaten\n", i);
-    if (i > 0) {
-        pthread_mutex_unlock(&philo->forks[i - 1]);
+	thread = (t_philo_thread *)arg;
+	inner_while = 0;
+	while (thread->philo->death != 1)
+	{
+		i = thread->philo_id;
+		time_init(thread->philo);
+		start = thread->philo->time.tv_usec * 1000;
+		if (i == thread->philo->nb_philo)
+			y = 0;
+		else
+			y = i;
+		pthread_mutex_lock(&thread->philo->forks[i - 1]);
+		pthread_mutex_lock(&thread->philo->forks[y]);
+		printf("%ld %d is eating\n", start - thread->philo->start, i);
+		usleep(thread->philo->eat_time * 1000);
+		time_init(thread->philo);
+		now = thread->philo->time.tv_usec * 1000;
+		pthread_mutex_unlock(&thread->philo->forks[i - 1]);
+		pthread_mutex_unlock(&thread->philo->forks[y]);
+        inner_while++;
+        if (inner_while == 5)
+            return (NULL);
     }
-    else if (i == 0)
-        pthread_mutex_unlock(&philo->forks[0]);
     return (NULL);
 }
-
 
 // 1 : parsing
 // 2 : gestion des threads
