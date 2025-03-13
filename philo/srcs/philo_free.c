@@ -6,7 +6,7 @@
 /*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 12:43:33 by ifounas           #+#    #+#             */
-/*   Updated: 2025/03/12 11:39:14 by ifounas          ###   ########.fr       */
+/*   Updated: 2025/03/13 14:12:47 by ifounas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,14 @@ void	free_philo(t_philo *philo, int exit_code)
 	exit(exit_code);
 }
 
-void	free_threads(t_philo *philo, int exit_code)
+void	free_threads(t_philo_thread *thread, t_philo *philo, int exit_code)
 {
 	int	i;
 
 	i = -1;
+	(void)thread;
+	// if (thread)
+	// 	free(thread);
 	while (++i < philo->nb_philo)
 		if (pthread_join(philo->philos[i], NULL) != 0)
 			free_philo(philo, 1);

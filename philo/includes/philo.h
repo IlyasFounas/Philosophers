@@ -5,13 +5,13 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/03 16:45:33 by ifounas           #+#    #+#             */
-/*   Updated: 2025/03/12 13:37:28 by ifounas          ###   ########.fr       */
+/*   Created: 2025/03/13 13:39:11 by ifounas           #+#    #+#             */
+/*   Updated: 2025/03/13 13:41:12 by ifounas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
+#ifndef PHILO_H
+# define PHILO_H
 
 # include <fcntl.h>
 # include <limits.h>
@@ -31,6 +31,7 @@ typedef struct s_philo
 	long int		eat_time;
 	long int		sleep_time;
 	long int		think_time;
+	long int		many_times;
 	int				death;
 	struct timeval	time;
 	pthread_t		*philos;
@@ -41,6 +42,8 @@ typedef struct s_philo
 typedef struct s_philo_thread
 {
 	int				philo_id;
+	long int		last_meal;
+	int				died;
 	t_philo			*philo;
 }					t_philo_thread;
 
@@ -53,15 +56,20 @@ void				check_infos(t_philo *philo);
 
 // philo_free
 void				free_philo(t_philo *philo, int exit_code);
-void				free_threads(t_philo *philo, int exit_code);
+void				free_threads(t_philo_thread *thread, t_philo *philo,
+						int exit_code);
 
 // philo_init
+void				philo_init(t_philo *philo, long int nb_philo,
+						long int death_time, long int eat_time);
 void				time_init(t_philo *philo);
-long int			get_absulte_time(long int t1, long int t2);
 void				forks_init(t_philo *philo);
 void				threads_init(t_philo *philo);
 
 // philo_manage
 void				*manage_threads(void *arg);
+
+// philo
+long int			get_absolute_time(long int t1, long int t2);
 
 #endif

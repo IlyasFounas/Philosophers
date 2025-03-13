@@ -6,24 +6,27 @@
 /*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/08 14:32:22 by ifounas           #+#    #+#             */
-/*   Updated: 2025/03/12 13:37:13 by ifounas          ###   ########.fr       */
+/*   Updated: 2025/03/13 14:22:06 by ifounas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+void	philo_init(t_philo *philo, long int nb_philo, long int death_time,
+		long int eat_time)
+{
+	time_init(philo);
+	philo->start = philo->time.tv_usec;
+	philo->nb_philo = nb_philo;
+	philo->death_time = death_time;
+	philo->eat_time = eat_time;
+}
 
 void	time_init(t_philo *philo)
 {
 	if (gettimeofday(&philo->time, NULL) == -1)
 		free_philo(philo, 1);
 	return ;
-}
-
-long int	get_absulte_time(long int t1, long int t2)
-{
-	if (t1 - t2 < 0)
-		return ((t1 - t2) * -1);
-	return (t1 - t2);
 }
 
 void	forks_init(t_philo *philo)
@@ -42,9 +45,13 @@ void	forks_init(t_philo *philo)
 void	threads_init(t_philo *philo)
 {
 	int				i;
-	t_philo_thread	threads[philo->nb_philo];
+	t_philo_thread	*threads;
+	// t_philo_thread	threads[philo->nb_philo];
 
 	i = -1;
+	threads = malloc(philo->nb_philo * sizeof(t_philo_thread));
+	if (!threads)
+		free_philo(philo, 1);
 	philo->philos = malloc((philo->nb_philo) * sizeof(pthread_t));
 	if (!philo->philos)
 		free_philo(philo, 1);
@@ -56,6 +63,6 @@ void	threads_init(t_philo *philo)
 				&threads[i]) != 0)
 			free_philo(philo, 1);
 	}
-	free_threads(philo, 0);
+	free_threads(threads, philo, 0);
 	return ;
 }
