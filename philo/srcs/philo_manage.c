@@ -6,33 +6,33 @@
 /*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 12:42:12 by ifounas           #+#    #+#             */
-/*   Updated: 2025/03/13 15:24:13 by ifounas          ###   ########.fr       */
+/*   Updated: 2025/03/17 14:05:48 by ifounas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static void	is_someone_dead(t_philo_thread *thread)
-{
-	long int	actual_time;
+// static void	is_someone_dead(t_philo_thread *thread)
+// {
+// 	long int	actual_time;
 
-	time_init(thread->philo);
-	actual_time = get_absolute_time(thread->philo->time.tv_usec,
-			thread->philo->start) / 1000;
-	if (get_absolute_time(thread->last_meal,
-			actual_time) > thread->philo->death_time)
-	{
-		pthread_mutex_unlock(&thread->philo->forks[thread->philo_id - 1]);
-		printf("%ld %d died\n", actual_time, thread->philo_id);
-		thread->died = 1;
-	}
-	thread->died = 0;
-}
+// 	time_init(thread->philo);
+// 	actual_time = get_absolute_time(thread->philo->time.tv_usec,
+// 			thread->philo->start) / 1000;
+// 	if (get_absolute_time(thread->last_meal,
+// 			actual_time) > thread->philo->death_time)
+// 	{
+// 		pthread_mutex_unlock(&thread->philo->forks[thread->philo_id - 1]);
+// 		printf("%ld %d died\n", actual_time, thread->philo_id);
+// 		thread->died = 1;
+// 	}
+// 	thread->died = 0;
+// }
 
 static void	take_a_fork(t_philo_thread *thread, int i)
 {
 	pthread_mutex_lock(&thread->philo->forks[i]);
-	is_someone_dead(thread);
+	// is_someone_dead(thread);
 	if (thread->died == 1)
 		return ;
 	time_init(thread->philo);
@@ -74,13 +74,17 @@ static void	eat_time(t_philo_thread *thread, int i)
 
 static void	wait_manage(t_philo_thread *thread, int i, char *str, long int time)
 {
-	is_someone_dead(thread);
-	if (thread->died == 1)
-		return ;
+	// is_someone_dead(thread);
+	// if (thread->died == 1)
+	// 	return ;
 	time_init(thread->philo);
+	
 	printf("%ld %d %s\n", get_absolute_time(thread->philo->time.tv_usec,
 			thread->philo->start) / 1000, i, str);
 	usleep(time * 1000);
+	// is_someone_dead(thread);
+	// if (thread->died == 1)
+	// 	return ;
 }
 
 void	*manage_threads(void *arg)
@@ -91,22 +95,25 @@ void	*manage_threads(void *arg)
 	thread = (t_philo_thread *)arg;
 	inner_while = (int)thread->philo->many_times;
 	thread->last_meal = 0;
-	while (thread->philo->death != 1 && thread->philo->death != 1)
+	while (thread->philo->death != 1)
 	{
 		eat_time(thread, thread->philo_id);
-		if (thread->died == 1)
-			return (thread->philo->death = 1, NULL);
+		// if (thread->died == 1)
+		// 	return (thread->philo->death = 1, NULL);
 		time_init(thread->philo);
-		thread->last_meal = get_absolute_time(thread->philo->time.tv_usec,
-				thread->philo->start) / 1000;
+		thread->last_meal = 1;
+		// thread->last_meal = get_absolute_time(thread->philo->time.tv_usec,
+		// 		thread->philo->start) / 1000;
 		wait_manage(thread, thread->philo_id, "is sleeping",
 			thread->philo->sleep_time);
-		if (thread->died == 1)
-			return (thread->philo->death = 1, NULL);
+		// if (thread->died == 1)
+		// 	return (thread->philo->death = 1, NULL);
 		wait_manage(thread, thread->philo_id, "is thinking",
 			thread->philo->think_time);
-		if (--inner_while <= 0 || thread->died == -1)
+		if (inner_while == 1)
 			return (thread->philo->death = 1, NULL);
+		else if (inner_while != 0)
+			inner_while--;
 	}
 	return (NULL);
 }
