@@ -6,7 +6,7 @@
 /*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 15:11:25 by ifounas           #+#    #+#             */
-/*   Updated: 2025/03/13 13:25:45 by ifounas          ###   ########.fr       */
+/*   Updated: 2025/03/18 13:44:55 by ifounas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,4 +33,27 @@ void	check_infos(t_philo *philo)
 		free_philo(philo, 1);
 	if (philo->many_times == LONG_MIN + 1)
 		free_philo(philo, 1);
+}
+
+void	check_someone_died(t_philo *philo, t_philo_thread *threads)
+{
+	int	i;
+
+	while (philo->death != 1)
+	{
+		time_init(philo);
+		i = -1;
+		while (++i < philo->nb_philo)
+		{
+			if (get_absolute_time(threads[i].last_meal,
+					get_absolute_time(threads[i].philo->time.tv_usec, 0))
+				/ 1000 > philo->death_time)
+			{
+				printf("%ld %d died\n", philo->time.tv_usec / 1000, i + 1);
+				return ;
+				// exit(1);
+				// free_threads(threads, philo, 1);
+			}
+		}
+	}
 }

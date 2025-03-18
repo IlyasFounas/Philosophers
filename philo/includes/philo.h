@@ -6,7 +6,7 @@
 /*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 13:39:11 by ifounas           #+#    #+#             */
-/*   Updated: 2025/03/17 11:13:37 by ifounas          ###   ########.fr       */
+/*   Updated: 2025/03/18 10:39:47 by ifounas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ typedef struct s_philo
 	struct timeval	time;
 	pthread_t		*philos;
 	pthread_mutex_t	*forks;
+	pthread_mutex_t	print;
 	suseconds_t		start;
 }					t_philo;
 
@@ -53,6 +54,7 @@ long int			ft_atoi_error(const char *nptr);
 // philo_check
 void				check_args(int args);
 void				check_infos(t_philo *philo);
+void				check_someone_died(t_philo *philo, t_philo_thread *threads);
 
 // philo_free
 void				free_philo(t_philo *philo, int exit_code);

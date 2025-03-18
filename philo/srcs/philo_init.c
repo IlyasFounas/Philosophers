@@ -6,7 +6,7 @@
 /*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/08 14:32:22 by ifounas           #+#    #+#             */
-/*   Updated: 2025/03/17 13:59:55 by ifounas          ###   ########.fr       */
+/*   Updated: 2025/03/18 15:01:04 by ifounas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,16 +39,15 @@ void	forks_init(t_philo *philo)
 		free_philo(philo, 1);
 	while (++i < philo->nb_philo)
 		pthread_mutex_init(&philo->forks[i], NULL);
+	pthread_mutex_init(&philo->print, NULL);
 	return ;
 }
 
 void	threads_init(t_philo *philo)
 {
 	int				i;
-	long int		time_check;
 	t_philo_thread	*threads;
 
-	time_check = 0;
 	i = -1;
 	threads = malloc(philo->nb_philo * sizeof(t_philo_thread));
 	if (!threads)
@@ -64,15 +63,7 @@ void	threads_init(t_philo *philo)
 				&threads[i]) != 0)
 			free_philo(philo, 1);
 	}
-	while (1)
-	{
-		time_init(philo);
-		time_check = get_absolute_time(philo->time.tv_usec, time_check) / 1000;
-		i = -1;
-		while (++i < philo->nb_philo)
-			if (threads[i].last_meal == 0 && time_check > philo->death_time)
-				free_threads(threads, philo, 0);
-	}
+	// check_someone_died(philo, threads);
 	free_threads(threads, philo, 0);
 	return ;
 }
