@@ -6,7 +6,7 @@
 /*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 13:39:11 by ifounas           #+#    #+#             */
-/*   Updated: 2025/03/18 10:39:47 by ifounas          ###   ########.fr       */
+/*   Updated: 2025/03/19 10:49:41 by ifounas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ typedef struct s_philo_thread
 	int				philo_id;
 	long int		last_meal;
 	int				died;
+	struct timeval	time;
 	t_philo			*philo;
 }					t_philo_thread;
 
@@ -65,6 +66,7 @@ void				free_threads(t_philo_thread *thread, t_philo *philo,
 void				philo_init(t_philo *philo, long int nb_philo,
 						long int death_time, long int eat_time);
 void				time_init(t_philo *philo);
+void				time_init_thread(t_philo_thread *thread);
 void				forks_init(t_philo *philo);
 void				threads_init(t_philo *philo);
 

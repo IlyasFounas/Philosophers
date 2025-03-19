@@ -6,7 +6,7 @@
 /*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 12:42:12 by ifounas           #+#    #+#             */
-/*   Updated: 2025/03/18 14:55:21 by ifounas          ###   ########.fr       */
+/*   Updated: 2025/03/19 13:25:26 by ifounas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,10 @@
 static void	take_a_fork(t_philo_thread *thread, int i)
 {
 	pthread_mutex_lock(&thread->philo->forks[i]);
-	time_init(thread->philo);
-	printf("%ld %d has taken a fork\n",
-		get_absolute_time(thread->philo->time.tv_usec, thread->philo->start)
-		/ 1000, thread->philo_id);
+	time_init_thread(thread);
+	printf("%ld %d has taken a fork\n", get_absolute_time(thread->time.tv_sec
+			* 1000 + thread->time.tv_usec / 1000, thread->philo->start),
+		thread->philo_id);
 }
 
 static void	eat_time(t_philo_thread *thread, int i)
@@ -39,9 +39,9 @@ static void	eat_time(t_philo_thread *thread, int i)
 		take_a_fork(thread, i - 1);
 	}
 	pthread_mutex_lock(&thread->philo->print);
-	time_init(thread->philo);
-	printf("%ld %d is eating\n", get_absolute_time(thread->philo->time.tv_usec,
-			0) / 1000, i);
+	time_init_thread(thread);
+	printf("%ld %d is eating\n", get_absolute_time(thread->time.tv_sec * 1000
+			+ thread->time.tv_usec / 1000, thread->philo->start), i);
 	pthread_mutex_unlock(&thread->philo->print);
 	usleep(thread->philo->eat_time * 1000);
 	pthread_mutex_unlock(&thread->philo->forks[i - 1]);
@@ -51,9 +51,9 @@ static void	eat_time(t_philo_thread *thread, int i)
 static void	wait_manage(t_philo_thread *thread, int i, char *str, long int time)
 {
 	pthread_mutex_lock(&thread->philo->print);
-	time_init(thread->philo);
-	printf("%ld %d %s\n", get_absolute_time(thread->philo->time.tv_usec, 0)
-		/ 1000, i, str);
+	time_init_thread(thread);
+	printf("%ld %d %s\n", get_absolute_time(thread->time.tv_sec * 1000
+			+ thread->time.tv_usec / 1000, thread->philo->start), i, str);
 	pthread_mutex_unlock(&thread->philo->print);
 	usleep(time * 1000);
 }
@@ -69,8 +69,9 @@ void	*manage_threads(void *arg)
 	while (thread->philo->death != 1)
 	{
 		eat_time(thread, thread->philo_id);
-		time_init(thread->philo);
-		thread->last_meal = get_absolute_time(thread->philo->time.tv_usec, 0);
+		time_init_thread(thread);
+		thread->last_meal = get_absolute_time(thread->time.tv_sec * 1000
+				+ thread->time.tv_usec / 1000, thread->philo->start);
 		wait_manage(thread, thread->philo_id, "is sleeping",
 			thread->philo->sleep_time);
 		wait_manage(thread, thread->philo_id, "is thinking",
@@ -82,6 +83,3 @@ void	*manage_threads(void *arg)
 	}
 	return (NULL);
 }
-
-// fonction pour trouver si un philo est mort
-// le temps qui s'affiche bizarement

@@ -6,7 +6,7 @@
 /*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/08 14:32:22 by ifounas           #+#    #+#             */
-/*   Updated: 2025/03/18 15:01:04 by ifounas          ###   ########.fr       */
+/*   Updated: 2025/03/19 13:25:32 by ifounas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	philo_init(t_philo *philo, long int nb_philo, long int death_time,
 		long int eat_time)
 {
 	time_init(philo);
-	philo->start = philo->time.tv_usec;
+	philo->start = philo->time.tv_sec * 1000 + philo->time.tv_usec / 1000;
 	philo->nb_philo = nb_philo;
 	philo->death_time = death_time;
 	philo->eat_time = eat_time;
@@ -26,6 +26,13 @@ void	time_init(t_philo *philo)
 {
 	if (gettimeofday(&philo->time, NULL) == -1)
 		free_philo(philo, 1);
+	return ;
+}
+
+void	time_init_thread(t_philo_thread *thread)
+{
+	if (gettimeofday(&thread->time, NULL) == -1)
+		free_philo(thread->philo, 1);
 	return ;
 }
 
