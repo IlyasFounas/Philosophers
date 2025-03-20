@@ -6,7 +6,7 @@
 /*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 15:11:25 by ifounas           #+#    #+#             */
-/*   Updated: 2025/03/18 13:44:55 by ifounas          ###   ########.fr       */
+/*   Updated: 2025/03/20 10:57:44 by ifounas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,19 +41,34 @@ void	check_someone_died(t_philo *philo, t_philo_thread *threads)
 
 	while (philo->death != 1)
 	{
-		time_init(philo);
 		i = -1;
 		while (++i < philo->nb_philo)
 		{
+			pthread_mutex_lock(&threads[i].philo->print);
+			time_init_thread(&threads[i]);
+			if (threads[i].last_meal == 0)
+				threads[i].last_meal = get_absolute_time(threads[i].time.tv_sec
+						* 1000 + threads[i].time.tv_usec / 1000,
+						threads[i].philo->start);
 			if (get_absolute_time(threads[i].last_meal,
-					get_absolute_time(threads[i].philo->time.tv_usec, 0))
-				/ 1000 > philo->death_time)
+					get_absolute_time(threads[i].time.tv_sec * 1000
+						+ threads[i].time.tv_usec / 1000,
+						threads[i].philo->start)) > threads[i].philo->death_time)
 			{
-				printf("%ld %d died\n", philo->time.tv_usec / 1000, i + 1);
-				return ;
-				// exit(1);
+				printf("%ld %ld %ld\n", get_absolute_time(threads[i].last_meal,
+						get_absolute_time(threads[i].time.tv_sec * 1000
+							+ threads[i].time.tv_usec / 1000,
+							threads[i].philo->start)),
+					get_absolute_time(threads[i].time.tv_sec * 1000
+						+ threads[i].time.tv_usec / 1000,
+						threads[i].philo->start), threads[i].last_meal);
+				printf("%ld %d died\n", get_absolute_time(threads[i].time.tv_sec
+						* 1000 + threads[i].time.tv_usec / 1000,
+						threads[i].philo->start), i + 1);
+				exit(1);
 				// free_threads(threads, philo, 1);
 			}
+			pthread_mutex_unlock(&threads[i].philo->print);
 		}
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 12:42:12 by ifounas           #+#    #+#             */
-/*   Updated: 2025/03/19 13:25:26 by ifounas          ###   ########.fr       */
+/*   Updated: 2025/03/20 10:26:52 by ifounas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,9 @@ void	*manage_threads(void *arg)
 
 	thread = (t_philo_thread *)arg;
 	inner_while = (int)thread->philo->many_times;
-	thread->last_meal = 0;
+	time_init_thread(thread);
+	thread->last_meal = get_absolute_time(thread->time.tv_sec * 1000
+			+ thread->time.tv_usec / 1000, thread->philo->start);
 	while (thread->philo->death != 1)
 	{
 		eat_time(thread, thread->philo_id);

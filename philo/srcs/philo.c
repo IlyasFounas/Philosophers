@@ -6,7 +6,7 @@
 /*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 16:44:08 by ifounas           #+#    #+#             */
-/*   Updated: 2025/03/17 11:13:34 by ifounas          ###   ########.fr       */
+/*   Updated: 2025/03/20 11:19:17 by ifounas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,9 @@ int	main(int arc, char **arv)
 	philo_init(&philo, ft_atoi_error(arv[1]), ft_atoi_error(arv[2]),
 		ft_atoi_error(arv[3]));
 	philo.sleep_time = ft_atoi_error(arv[4]);
-	philo.think_time = get_absolute_time(philo.death_time, (philo.eat_time
-				+ philo.sleep_time));
+	// philo.think_time = get_absolute_time(philo.death_time, (philo.eat_time
+	// 			+ philo.sleep_time));
+	philo.think_time = 0;
 	if (arc == 6)
 		philo.many_times = ft_atoi_error(arv[5]);
 	check_infos(&philo);

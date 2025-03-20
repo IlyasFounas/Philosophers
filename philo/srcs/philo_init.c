@@ -6,7 +6,7 @@
 /*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/08 14:32:22 by ifounas           #+#    #+#             */
-/*   Updated: 2025/03/19 13:25:32 by ifounas          ###   ########.fr       */
+/*   Updated: 2025/03/20 10:24:57 by ifounas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	threads_init(t_philo *philo)
 				&threads[i]) != 0)
 			free_philo(philo, 1);
 	}
-	// check_someone_died(philo, threads);
+	check_someone_died(philo, threads);
 	free_threads(threads, philo, 0);
 	return ;
 }
