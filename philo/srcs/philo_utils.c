@@ -12,6 +12,16 @@
 
 #include "philo.h"
 
+void	ms_sleep(int x_time)
+{
+	int	i;
+
+	i = -1;
+	while (++i < x_time)
+		usleep(1000);
+	return ;
+}
+
 long int	ft_atoi_ult(char *s, int *error)
 {
 	int i;

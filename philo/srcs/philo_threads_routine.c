@@ -1,33 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo_free.c                                       :+:      :+:    :+:   */
+/*   philo_threads_routine.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/07 15:46:50 by ifounas           #+#    #+#             */
-/*   Updated: 2025/06/07 18:13:09 by ifounas          ###   ########.fr       */
+/*   Created: 2025/06/07 16:23:25 by ifounas           #+#    #+#             */
+/*   Updated: 2025/06/07 18:41:45 by ifounas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	philo_free_all(t_philo *philo, t_philo_threads *philo_threads)
+void *philo_threads_routine(void *arg)
 {
-	int	i;
-	int	j;
+    t_philo_threads *philo_threads;
 
-	j = -1;
-	i = -1;
-	if (philo->forks)
-	{
-		while (++i < philo->nb_philo)
-			pthread_mutex_destroy(&philo->forks[i]);
-		free(philo->forks);
-	}
-	if (philo->philos)
-		free(philo->philos);
-	if (philo_threads)
-		free(philo_threads);
-	exit(0);
+    philo_threads = arg;
+    pthread_mutex_lock(&philo_threads->philo->stdout_acces);
+    printf("wich = %d\n", philo_threads->thread_nb);
+    pthread_mutex_unlock(&philo_threads->philo->stdout_acces);
+    return (NULL);
 }

@@ -5,12 +5,27 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/07 16:05:16 by ifounas           #+#    #+#             */
-/*   Updated: 2025/06/07 16:05:16 by ifounas          ###   ########.fr       */
+/*   Created: 2025/06/07 18:33:19 by ifounas           #+#    #+#             */
+/*   Updated: 2025/06/07 18:33:19 by ifounas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+void	philo_init_tab(t_philo *philo, t_philo_threads **philo_threads)
+{
+	int i;
+
+	i = -1;
+	*philo_threads = malloc((philo->nb_philo) * sizeof(t_philo_threads));
+	if (!*philo_threads)
+		philo_free_all(philo, NULL);
+	while (++i < philo->nb_philo)
+	{
+		(*philo_threads)[i].philo = philo;
+		(*philo_threads)[i].thread_nb = i + 1;
+	}
+}
 
 static void	philo_init_mutex(t_philo *philo)
 {
@@ -20,10 +35,31 @@ static void	philo_init_mutex(t_philo *philo)
 
 	philo->forks = malloc(philo->nb_philo * sizeof(pthread_mutex_t));
 	if (!philo->forks)
-		philo_free_all(philo);
+		philo_free_all(philo, NULL);
 	while (++i < philo->nb_philo)
 		if (pthread_mutex_init(&philo->forks[i], NULL) == -1)
-			philo_free_all(philo);
+			philo_free_all(philo, NULL);
+}
+
+void	philo_init_threads(t_philo *philo, t_philo_threads *philo_threads)
+{
+	int i;
+	int j;
+
+	i = -1;
+	j = -1;
+	while (++i < philo->nb_philo)
+	{
+		if (pthread_create(&philo->philos[i], NULL, philo_threads_routine,
+				&philo_threads[i]) != 0)
+		{
+			while (--i >= 0)
+				pthread_join(philo->philos[i], NULL);
+			philo_free_all(philo, philo_threads);
+		}
+	}
+	while (++j < philo->nb_philo)
+		pthread_join(philo->philos[j], NULL);
 }
 
 void	philo_init(t_philo *philo, char **argv)
@@ -43,9 +79,11 @@ void	philo_init(t_philo *philo, char **argv)
 		exit(0);
 	}
 	philo_init_mutex(philo);
-}
-
-void philo_init_threads(t_philo *philo)
-{
-
+	if (pthread_mutex_init(&philo->stdout_acces, NULL) == -1)
+			philo_free_all(philo, NULL);
+	philo->philos = malloc((philo->nb_philo) * sizeof(pthread_t));
+	if (!philo->philos)
+		philo_free_all(philo, NULL);
+	if (gettimeofday(philo->time, NULL) == -1)
+		philo_free_all(philo, NULL);
 }
