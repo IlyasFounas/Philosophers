@@ -1,24 +1,24 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   philo_main.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/06 23:33:49 by marvin            #+#    #+#             */
-/*   Updated: 2025/06/07 00:14:55 by marvin           ###   ########.fr       */
+/*   Created: 2025/06/07 16:05:30 by ifounas           #+#    #+#             */
+/*   Updated: 2025/06/07 16:05:30 by ifounas          ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "philo.h"
 
-void	ft_usleep(int x_time)
+void	ms_sleep(int x_time)
 {
 	int	i;
 
 	i = -1;
 	while (++i < x_time)
-		usleep(100);
+		usleep(1000);
 	return ;
 }
 
@@ -33,6 +33,6 @@ int	main(int argc, char **argv)
 		return (0);
 	}
 	philo_init(&philo, argv);
-	printf("%ld %ld \n", philo.nb_philo, philo.death_time);
+	philo_process(philo);
 	return (0);
 }
