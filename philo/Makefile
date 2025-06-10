@@ -4,6 +4,7 @@ SRC     = srcs/philo_free.c \
 		  srcs/philo_main.c \
 		  srcs/philo_process.c \
 		  srcs/philo_threads_routine.c \
+		  srcs/philo_time.c \
 		  srcs/philo_utils.c \
 
 MAKEFLAGS += --no-print-directory

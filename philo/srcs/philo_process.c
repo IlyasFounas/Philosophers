@@ -6,7 +6,7 @@
 /*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 16:07:27 by ifounas           #+#    #+#             */
-/*   Updated: 2025/06/07 18:44:06 by ifounas          ###   ########.fr       */
+/*   Updated: 2025/06/10 15:36:12 by ifounas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ void	philo_process(t_philo *philo, t_philo_threads *philo_threads)
 		printf("philo nb 1 has died");
 		philo_free_all(philo, philo_threads);
 	}
+	printf("global start_time = %ld\n", philo->start_time);
     philo_init_threads(philo, philo_threads);
 	philo_track_death();
 }

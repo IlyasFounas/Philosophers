@@ -29,3 +29,5 @@ int	main(int argc, char **argv)
 	philo_process(&philo, philo_threads);
 	return (0);
 }
+
+// clear; make ; valgrind --tool=helgrind ./philo 10 500 5 5

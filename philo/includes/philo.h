@@ -6,7 +6,7 @@
 /*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 13:39:11 by ifounas           #+#    #+#             */
-/*   Updated: 2025/06/07 18:51:16 by ifounas          ###   ########.fr       */
+/*   Updated: 2025/06/10 16:00:19 by ifounas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,9 @@ typedef struct s_philo
 	long int		eat_time;
 	long int		sleep_time;
 	long int		x_repeat;
-	struct timeval	*time;
+	long int		start_time;
 	pthread_mutex_t	*forks;
+	pthread_mutex_t	*last_eat_access;
 	pthread_mutex_t	stdout_acces;
 	pthread_t		*philos;
 }					t_philo;
@@ -40,30 +41,43 @@ typedef struct s_philo
 typedef struct s_philo_threads
 {
 	int				thread_nb;
+
 	t_philo			*philo;
+	int				fork;
+	long int		start_time;
+	long int		last_eat_time;
+	long int		intern_x_repeat;
 }					t_philo_threads;
 
-// philo_free
+/*---------- philo_free --*/
 void				philo_free_all(t_philo *philo,
 						t_philo_threads *philo_threads);
 
-// philo_init
+/*---------- philo_init --*/
 void				philo_init_tab(t_philo *philo,
 						t_philo_threads **philo_threads);
 void				philo_init(t_philo *philo, char **argv);
 void				philo_init_threads(t_philo *philo,
 						t_philo_threads *philo_threads);
 
-// philo_process
+/*---------- philo_process --*/
 void				philo_process(t_philo *philo,
 						t_philo_threads *philo_threads);
 
-// philo_main
+/*---------- philo_main --*/
 
-// philo_threads_routine
+/*---------- philo_threads_routine --*/
 void				*philo_threads_routine(void *arg);
 
-// philo_utils
+/*---------- philo_time --*/
+long int			return_actual_time(t_philo *philo,
+						t_philo_threads *philo_threads);
+void				last_eat_time(t_philo *philo,
+						t_philo_threads *philo_threads, int index);
+void				philo_init_time(t_philo *philo,
+						t_philo_threads *philo_threads);
+
+/*---------- philo_utils --*/
 long int			ft_atoi_ult(char *s, int *error);
 void				ms_sleep(int x_time);
 
