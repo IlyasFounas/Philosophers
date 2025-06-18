@@ -1,24 +1,24 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   philo_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 16:05:38 by ifounas           #+#    #+#             */
-/*   Updated: 2025/06/07 16:05:38 by ifounas          ###   ########.fr       */
+/*   Updated: 2025/06/18 14:01:21 by marvin           ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "philo.h"
 
-void	ms_sleep(int x_time)
+void	ms_sleep(t_philo *philo, t_philo_threads *philo_threads, int x_time)
 {
-	int	i;
+	long int start;
 
-	i = -1;
-	while (++i < x_time)
-		usleep(1000);
+	start = return_actual_time(philo, philo_threads);
+	while (start - return_actual_time(philo, philo_threads) < x_time)
+		usleep(500);
 	return ;
 }
 

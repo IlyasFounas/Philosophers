@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 13:39:11 by ifounas           #+#    #+#             */
-/*   Updated: 2025/06/10 16:00:19 by ifounas          ###   ########.fr       */
+/*   Updated: 2025/06/18 14:02:09 by marvin           ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #ifndef PHILO_H
 # define PHILO_H
@@ -79,6 +79,7 @@ void				philo_init_time(t_philo *philo,
 
 /*---------- philo_utils --*/
 long int			ft_atoi_ult(char *s, int *error);
-void				ms_sleep(int x_time);
+void				ms_sleep(t_philo *philo, t_philo_threads *philo_threads,
+						int x_time);
 
 #endif

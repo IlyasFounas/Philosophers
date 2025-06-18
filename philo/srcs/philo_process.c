@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   philo_process.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 16:07:27 by ifounas           #+#    #+#             */
-/*   Updated: 2025/06/10 15:36:12 by ifounas          ###   ########.fr       */
+/*   Updated: 2025/06/18 14:02:31 by marvin           ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "philo.h"
 
@@ -21,7 +21,7 @@ void	philo_process(t_philo *philo, t_philo_threads *philo_threads)
 {
 	if (philo->nb_philo == 1 || philo->nb_philo == 0)
 	{
-		ms_sleep(philo->death_time / 10);
+		ms_sleep(philo, NULL,philo->death_time);
 		printf("philo nb 1 has died");
 		philo_free_all(philo, philo_threads);
 	}
