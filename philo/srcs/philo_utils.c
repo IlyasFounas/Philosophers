@@ -17,8 +17,8 @@ void	ms_sleep(t_philo *philo, t_philo_threads *philo_threads, int x_time)
 	long int start;
 
 	start = return_actual_time(philo, philo_threads);
-	while (start - return_actual_time(philo, philo_threads) < x_time)
-		usleep(500);
+	while (return_actual_time(philo, philo_threads) - start < x_time)
+		usleep(100);
 	return ;
 }
 

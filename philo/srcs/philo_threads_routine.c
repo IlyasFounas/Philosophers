@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   philo_threads_routine.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 16:23:25 by ifounas           #+#    #+#             */
-/*   Updated: 2025/06/18 14:04:47 by marvin           ###   ########.fr       */
+/*   Updated: 2025/06/23 18:15:04 by ifounas          ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "philo.h"
 
@@ -44,7 +44,7 @@ void	*philo_threads_routine(void *arg)
 	{
 		philo_threads_take_forks(philo_threads);
 		philo_threads_eating(philo_threads);
-		// ms_sleep(NULL, philo_threads, philo_threads->philo->eat_time);
+		ms_sleep(NULL, philo_threads, 1000/* philo_threads->philo->eat_time */);
 		eated++;
 	}
 	return (NULL);
