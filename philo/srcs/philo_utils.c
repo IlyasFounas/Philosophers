@@ -12,14 +12,22 @@
 
 #include "philo.h"
 
-void	ms_sleep(t_philo *philo, t_philo_threads *philo_threads, int x_time)
+void set_forks(t_philo_threads *philo_threads)
 {
-	long int start;
+	int	fork1;
+	int	fork2;
+	int	tmp;
 
-	start = return_actual_time(philo, philo_threads);
-	while (return_actual_time(philo, philo_threads) - start < x_time)
-		usleep(100);
-	return ;
+	fork1 = philo_threads->thread_nb - 1;
+	fork2 = philo_threads->thread_nb % philo_threads->philo->nb_philo;
+	if (fork1 > fork2)
+	{
+		tmp = fork1;
+		fork1 = fork2;
+		fork2 = tmp;
+	}
+	philo_threads->fork1 = fork1;
+	philo_threads->fork2 = fork2;
 }
 
 long int	ft_atoi_ult(char *s, int *error)

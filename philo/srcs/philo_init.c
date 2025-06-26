@@ -70,6 +70,19 @@ void	philo_init_threads(t_philo *philo, t_philo_threads *philo_threads)
 		pthread_join(philo->philos[j], NULL);
 }
 
+void philo_init_forks(t_philo *philo)
+{
+	int i;
+
+	i = -1;
+	philo->forks_tab = malloc(philo->nb_philo * sizeof(int));
+	if (!philo->forks)
+		philo_free_all(philo, NULL);
+	while (++i < philo->nb_philo)
+		philo->forks_tab[i] = 1;
+	return ;
+}
+
 void	philo_init(t_philo *philo, char **argv)
 {
 	int error;
@@ -90,6 +103,7 @@ void	philo_init(t_philo *philo, char **argv)
 		exit(0);
 	}
 	philo_init_mutex(philo);
+	philo_init_forks(philo);
 	if (pthread_mutex_init(&philo->stdout_acces, NULL) == -1)
 			philo_free_all(philo, NULL);
 	philo->philos = malloc((philo->nb_philo) * sizeof(pthread_t));
