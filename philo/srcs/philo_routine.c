@@ -6,7 +6,7 @@
 /*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 15:27:25 by ifounas           #+#    #+#             */
-/*   Updated: 2025/06/26 19:01:29 by ifounas          ###   ########.fr       */
+/*   Updated: 2025/06/27 10:53:20 by ifounas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,11 @@ static void philo_threads_sleeping(t_philo_threads *philo_threads)
 }
 
 static void philo_threads_thinking(t_philo_threads *philo_threads)
-{
-	return ;
+{	
+	pthread_mutex_lock(&philo_threads->philo->stdout_acces);
+	printf("%ld %d is thinking\n", return_actual_time(NULL, philo_threads),
+		philo_threads->thread_nb);
+	pthread_mutex_unlock(&philo_threads->philo->stdout_acces);
 }
 
 void	*philo_threads_routine(void *arg)
@@ -47,12 +50,14 @@ void	*philo_threads_routine(void *arg)
 	eated = 0;
 	philo_threads = arg;
 	philo_init_time(NULL, philo_threads);
-	while (eated != philo_threads->intern_x_repeat)
+	while (42)
 	{
 		philo_threads_eating(philo_threads);
+		eated++;
+		if (eated == philo_threads->intern_x_repeat + 1)
+			break ;
 		philo_threads_sleeping(philo_threads);
 		philo_threads_thinking(philo_threads);
-		eated++;
 	}
 	return (NULL);
 }
