@@ -20,7 +20,7 @@ void set_forks(t_philo_threads *philo_threads)
 
 	fork1 = philo_threads->thread_nb - 1;
 	fork2 = philo_threads->thread_nb % philo_threads->philo->nb_philo;
-	if (fork1 > fork2)
+	if (fork1 % 2 == 1)
 	{
 		tmp = fork1;
 		fork1 = fork2;

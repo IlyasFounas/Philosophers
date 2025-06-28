@@ -6,7 +6,7 @@
 /*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 15:27:25 by ifounas           #+#    #+#             */
-/*   Updated: 2025/06/27 10:53:20 by ifounas          ###   ########.fr       */
+/*   Updated: 2025/06/28 16:52:44 by ifounas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,9 @@ static void	philo_threads_eating(t_philo_threads *philo_threads)
 	printf("%ld %d is eating\n", return_actual_time(NULL, philo_threads),
 		philo_threads->thread_nb);
 	pthread_mutex_unlock(&philo_threads->philo->stdout_acces);
+	pthread_mutex_lock(philo_threads->philo->last_eat_access);
+	philo_threads->last_eat_time = return_actual_time(NULL, philo_threads);
+	pthread_mutex_unlock(philo_threads->philo->last_eat_access);
 	ms_sleep(NULL, philo_threads, philo_threads->philo->eat_time);
 	philo_threads_release_forks(philo_threads);
 }
@@ -54,7 +57,7 @@ void	*philo_threads_routine(void *arg)
 	{
 		philo_threads_eating(philo_threads);
 		eated++;
-		if (eated == philo_threads->intern_x_repeat + 1)
+		if (eated == philo_threads->intern_x_repeat)
 			break ;
 		philo_threads_sleeping(philo_threads);
 		philo_threads_thinking(philo_threads);

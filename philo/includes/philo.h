@@ -6,7 +6,7 @@
 /*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 13:39:11 by ifounas           #+#    #+#             */
-/*   Updated: 2025/06/26 18:47:14 by ifounas          ###   ########.fr       */
+/*   Updated: 2025/06/28 19:36:31 by ifounas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ typedef struct s_philo
 	pthread_mutex_t	*last_eat_access;
 	pthread_mutex_t	stdout_acces;
 	pthread_t		*philos;
+	pthread_t		track_death;
 }					t_philo;
 
 typedef struct s_philo_threads
@@ -64,6 +65,7 @@ void				philo_init_threads(t_philo *philo,
 /*---------- philo_main --*/
 
 /*---------- philo_process --*/
+void				*philo_track_death(void *arg);
 void				philo_process(t_philo *philo,
 						t_philo_threads *philo_threads);
 
