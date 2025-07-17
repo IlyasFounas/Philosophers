@@ -25,6 +25,7 @@ void	philo_init_tab(t_philo *philo, t_philo_threads **philo_threads)
 		(*philo_threads)[i].philo = philo;
 		(*philo_threads)[i].thread_nb = i + 1;
 		(*philo_threads)[i].intern_x_repeat = philo->x_repeat;
+		(*philo_threads)[i].eated = 0;
 	}
 }
 
@@ -33,12 +34,13 @@ static void	philo_init_mutex(t_philo *philo)
 	int i;
 
 	i = -1;
-
 	philo->forks = malloc(philo->nb_philo * sizeof(pthread_mutex_t));
 	if (!philo->forks)
 		philo_free_all(philo, NULL);
 	philo->last_eat_access = malloc(philo->nb_philo * sizeof(pthread_mutex_t));
 	if (!philo->forks)
+		philo_free_all(philo, NULL);
+	if (pthread_mutex_init(&philo->eated_mut, NULL) == -1)
 		philo_free_all(philo, NULL);
 	while (++i < philo->nb_philo)
 	{

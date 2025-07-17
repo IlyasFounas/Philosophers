@@ -6,7 +6,7 @@
 /*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 15:27:25 by ifounas           #+#    #+#             */
-/*   Updated: 2025/06/28 16:52:44 by ifounas          ###   ########.fr       */
+/*   Updated: 2025/07/17 16:57:50 by ifounas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,17 +48,15 @@ static void philo_threads_thinking(t_philo_threads *philo_threads)
 void	*philo_threads_routine(void *arg)
 {
 	t_philo_threads	*philo_threads;
-	int				eated;
-
-	eated = 0;
+	
 	philo_threads = arg;
 	philo_init_time(NULL, philo_threads);
 	while (42)
 	{
 		philo_threads_eating(philo_threads);
-		eated++;
-		if (eated == philo_threads->intern_x_repeat)
-			break ;
+		pthread_mutex_lock(&philo_threads->philo->eated_mut);
+		philo_threads->eated++;
+		pthread_mutex_unlock(&philo_threads->philo->eated_mut);
 		philo_threads_sleeping(philo_threads);
 		philo_threads_thinking(philo_threads);
 	}

@@ -26,9 +26,7 @@ int	main(int argc, char **argv)
 	memset(&philo, 0, sizeof(t_philo));
 	philo_init(&philo, argv);
 	philo_init_tab(&philo, &philo_threads);
-	// pthread_create(&philo.track_death, NULL, philo_track_death, philo_threads);
 	philo_process(&philo, philo_threads);
-	// pthread_join(philo.track_death, NULL);
 	return (0);
 }
 
