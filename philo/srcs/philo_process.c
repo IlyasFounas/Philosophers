@@ -6,7 +6,7 @@
 /*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 16:07:27 by ifounas           #+#    #+#             */
-/*   Updated: 2025/07/17 18:33:52 by ifounas          ###   ########.fr       */
+/*   Updated: 2025/07/18 12:35:42 by ifounas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,19 @@
 
 int	philo_check_eat_finished(t_philo_threads *philo_threads)
 {
-	long	i;
+	int			i;
+	long int	j;
 
-	i = 0;
-	pthread_mutex_lock(&philo_threads->philo->eated_mut);
-	while (philo_threads[i].eated >= philo_threads[i].intern_x_repeat
-		&& i != philo_threads->philo->nb_philo)
-		i++;
-	pthread_mutex_unlock(&philo_threads->philo->eated_mut);
-	if (i == philo_threads->philo->nb_philo)
+	i = -1;
+	j = 0;
+	while (++i < philo_threads->philo->nb_philo)
+	{
+		pthread_mutex_lock(&philo_threads[i].meals_mut);
+		if (philo_threads[i].meals >= philo_threads->intern_x_repeat)
+			j++;
+		pthread_mutex_unlock(&philo_threads[i].meals_mut);
+	}
+	if (j >= philo_threads->philo->nb_philo - 1)
 		return (1);
 	return (0);
 }
@@ -30,22 +34,21 @@ int	philo_check_eat_finished(t_philo_threads *philo_threads)
 void	*philo_track_death(void *arg)
 {
 	int				i;
-	long			last_eat;
+	int				y;
 	t_philo_threads	*philo_threads;
 
+	// long			last_eat;
 	i = 0;
+	y = 0;
 	philo_threads = arg;
 	while (42)
 	{
-		if (philo_check_eat_finished(philo_threads) == 1)
-		{
-			pthread_mutex_lock(&philo_threads->philo->stdout_acces);
-			pthread_mutex_unlock(&philo_threads->philo->stdout_acces);
+		if (philo_threads->intern_x_repeat != -1
+			&& philo_check_eat_finished(philo_threads) == 1)
 			exit(0);
-		}
-		pthread_mutex_lock(&philo_threads[i].philo->last_eat_access[i]);
-		last_eat = philo_threads[i].last_eat_time;
-		pthread_mutex_unlock(&philo_threads[i].philo->last_eat_access[i]);
+		// pthread_mutex_lock(&philo_threads[i].philo->last_eat_access[i]);
+		// last_eat = philo_threads[i].last_eat_time;
+		// pthread_mutex_unlock(&philo_threads[i].philo->last_eat_access[i]);
 		// if (return_actual_time(NULL, &philo_threads[i])
 		// 	- last_eat > philo_threads[i].philo->death_time)
 		// {

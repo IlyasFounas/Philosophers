@@ -6,7 +6,7 @@
 /*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 13:39:11 by ifounas           #+#    #+#             */
-/*   Updated: 2025/07/17 17:01:10 by ifounas          ###   ########.fr       */
+/*   Updated: 2025/07/18 11:45:14 by ifounas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ typedef struct s_philo
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	*last_eat_access;
 	pthread_mutex_t	stdout_acces;
-	pthread_mutex_t	eated_mut;
 	pthread_t		*philos;
 	pthread_t		track_death;
 }					t_philo;
@@ -46,10 +45,11 @@ typedef struct s_philo_threads
 	long int		start_time;
 	long int		last_eat_time;
 	long int		intern_x_repeat;
+	long int		meals;
 	int				thread_nb;
 	int				fork1;
 	int				fork2;
-	long			eated;
+	pthread_mutex_t	meals_mut;
 	t_philo			*philo;
 }					t_philo_threads;
 

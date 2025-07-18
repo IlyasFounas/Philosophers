@@ -6,7 +6,7 @@
 /*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 15:27:25 by ifounas           #+#    #+#             */
-/*   Updated: 2025/07/17 16:57:50 by ifounas          ###   ########.fr       */
+/*   Updated: 2025/07/18 11:45:38 by ifounas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,9 @@ void	*philo_threads_routine(void *arg)
 	while (42)
 	{
 		philo_threads_eating(philo_threads);
-		pthread_mutex_lock(&philo_threads->philo->eated_mut);
-		philo_threads->eated++;
-		pthread_mutex_unlock(&philo_threads->philo->eated_mut);
+		pthread_mutex_lock(&philo_threads->meals_mut);
+		philo_threads->meals++;
+		pthread_mutex_unlock(&philo_threads->meals_mut);
 		philo_threads_sleeping(philo_threads);
 		philo_threads_thinking(philo_threads);
 	}
