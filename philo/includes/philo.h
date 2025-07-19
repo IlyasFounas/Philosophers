@@ -6,7 +6,7 @@
 /*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 13:39:11 by ifounas           #+#    #+#             */
-/*   Updated: 2025/07/18 11:45:14 by ifounas          ###   ########.fr       */
+/*   Updated: 2025/07/19 17:52:54 by ifounas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ typedef struct s_philo
 	long int		x_repeat;
 	long int		start_time;
 	int				*forks_tab;
+	int				stop_simualtion;
+	pthread_mutex_t	stop_simulation_mut;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	*last_eat_access;
 	pthread_mutex_t	stdout_acces;
@@ -44,7 +46,6 @@ typedef struct s_philo_threads
 {
 	long int		start_time;
 	long int		last_eat_time;
-	long int		intern_x_repeat;
 	long int		meals;
 	int				thread_nb;
 	int				fork1;

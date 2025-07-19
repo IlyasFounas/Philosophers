@@ -6,7 +6,7 @@
 /*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 15:27:25 by ifounas           #+#    #+#             */
-/*   Updated: 2025/07/18 11:45:38 by ifounas          ###   ########.fr       */
+/*   Updated: 2025/07/19 18:07:47 by ifounas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,12 @@ static void	philo_threads_eating(t_philo_threads *philo_threads)
 	pthread_mutex_unlock(philo_threads->philo->last_eat_access);
 	ms_sleep(NULL, philo_threads, philo_threads->philo->eat_time);
 	philo_threads_release_forks(philo_threads);
+	pthread_mutex_lock(&philo_threads->meals_mut);
+	philo_threads->meals++;
+	pthread_mutex_unlock(&philo_threads->meals_mut);
 }
 
-static void philo_threads_sleeping(t_philo_threads *philo_threads)
+static void	philo_threads_sleeping(t_philo_threads *philo_threads)
 {
 	pthread_mutex_lock(&philo_threads->philo->stdout_acces);
 	printf("%ld %d is sleeping\n", return_actual_time(NULL, philo_threads),
@@ -37,8 +40,8 @@ static void philo_threads_sleeping(t_philo_threads *philo_threads)
 	ms_sleep(NULL, philo_threads, philo_threads->philo->sleep_time);
 }
 
-static void philo_threads_thinking(t_philo_threads *philo_threads)
-{	
+static void	philo_threads_thinking(t_philo_threads *philo_threads)
+{
 	pthread_mutex_lock(&philo_threads->philo->stdout_acces);
 	printf("%ld %d is thinking\n", return_actual_time(NULL, philo_threads),
 		philo_threads->thread_nb);
@@ -48,15 +51,19 @@ static void philo_threads_thinking(t_philo_threads *philo_threads)
 void	*philo_threads_routine(void *arg)
 {
 	t_philo_threads	*philo_threads;
-	
+
 	philo_threads = arg;
 	philo_init_time(NULL, philo_threads);
 	while (42)
 	{
 		philo_threads_eating(philo_threads);
-		pthread_mutex_lock(&philo_threads->meals_mut);
-		philo_threads->meals++;
-		pthread_mutex_unlock(&philo_threads->meals_mut);
+		pthread_mutex_lock(&philo_threads->philo->stop_simulation_mut);
+		if (philo_threads->philo->stop_simualtion == 1)
+		{
+			pthread_mutex_unlock(&philo_threads->philo->stop_simulation_mut);
+			break ;
+		}
+		pthread_mutex_unlock(&philo_threads->philo->stop_simulation_mut);
 		philo_threads_sleeping(philo_threads);
 		philo_threads_thinking(philo_threads);
 	}
