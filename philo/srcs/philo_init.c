@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/07 18:33:19 by ifounas           #+#    #+#             */
-/*   Updated: 2025/06/07 18:33:19 by ifounas          ###   ########.fr       */
+/*   Created: 2025/07/21 17:00:52 by ifounas           #+#    #+#             */
+/*   Updated: 2025/07/21 17:00:52 by ifounas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	philo_init_tab(t_philo *philo, t_philo_threads **philo_threads)
 {
-	int i;
+	int		i;
 
 	i = -1;
 	*philo_threads = malloc((philo->nb_philo) * sizeof(t_philo_threads));
@@ -31,18 +31,23 @@ void	philo_init_tab(t_philo *philo, t_philo_threads **philo_threads)
 	}
 }
 
-static void	philo_init_mutex(t_philo *philo)
+static void	philo_init_mutex(t_philo *philo, int i)
 {
-	int i;
-
-	i = -1;
+	if (pthread_mutex_init(&philo->stdout_acces, NULL) == -1)
+	{
+		philo->stdout_mut_failed = 1;
+		philo_free_all(philo, NULL);
+	}
+	if (pthread_mutex_init(&philo->stop_simulation_mut, NULL) == -1)
+	{
+		philo->simulation_mut_failed = 1;
+		philo_free_all(philo, NULL);
+	}
 	philo->forks = malloc(philo->nb_philo * sizeof(pthread_mutex_t));
 	if (!philo->forks)
 		philo_free_all(philo, NULL);
 	philo->last_eat_access = malloc(philo->nb_philo * sizeof(pthread_mutex_t));
-	if (!philo->forks)
-		philo_free_all(philo, NULL);
-	if (pthread_mutex_init(&philo->stop_simulation_mut, NULL) == -1)
+	if (!philo->last_eat_access)
 		philo_free_all(philo, NULL);
 	while (++i < philo->nb_philo)
 	{
@@ -55,8 +60,8 @@ static void	philo_init_mutex(t_philo *philo)
 
 void	philo_init_threads(t_philo *philo, t_philo_threads *philo_threads)
 {
-	int i;
-	int j;
+	int		i;
+	int		j;
 
 	i = -1;
 	j = -1;
@@ -74,9 +79,9 @@ void	philo_init_threads(t_philo *philo, t_philo_threads *philo_threads)
 		pthread_join(philo->philos[j], NULL);
 }
 
-void philo_init_forks(t_philo *philo)
+void	philo_init_forks(t_philo *philo)
 {
-	int i;
+	int		i;
 
 	i = -1;
 	philo->forks_tab = malloc(philo->nb_philo * sizeof(int));
@@ -89,10 +94,10 @@ void philo_init_forks(t_philo *philo)
 
 void	philo_init(t_philo *philo, char **argv)
 {
-	int error;
+	int		error;
 
 	error = 0;
-    philo_init_time(philo, NULL);
+	philo_init_time(philo, NULL);
 	philo->nb_philo = ft_atoi_ult(argv[1], &error);
 	philo->death_time = ft_atoi_ult(argv[2], &error);
 	philo->eat_time = ft_atoi_ult(argv[3], &error);
@@ -104,13 +109,11 @@ void	philo_init(t_philo *philo, char **argv)
 	if (error == 1)
 	{
 		printf("long int overflow\n");
-		exit(0);
+		exit(1);
 	}
 	error_msg(philo, argv[5]);
-	philo_init_mutex(philo);
+	philo_init_mutex(philo, -1);
 	philo_init_forks(philo);
-	if (pthread_mutex_init(&philo->stdout_acces, NULL) == -1)
-			philo_free_all(philo, NULL);
 	philo->philos = malloc((philo->nb_philo) * sizeof(pthread_t));
 	if (!philo->philos)
 		philo_free_all(philo, NULL);

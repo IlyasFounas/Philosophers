@@ -12,10 +12,9 @@
 
 #include "philo.h"
 
-
 void	error_msg(t_philo *philo, char *x_repeat)
 {
-	int ex;
+	int		ex;
 
 	ex = 0;
 	if (philo->nb_philo < 1)
@@ -34,13 +33,13 @@ void	error_msg(t_philo *philo, char *x_repeat)
 		ex = 1;
 	}
 	if (ex == 1)
-		exit(0);
+		exit(1);
 }
 
 int	main(int argc, char **argv)
 {
-	t_philo philo;
-	t_philo_threads *philo_threads;
+	t_philo			philo;
+	t_philo_threads	*philo_threads;
 
 	philo_threads = NULL;
 	if (argc > 6 || argc < 4)
@@ -55,5 +54,3 @@ int	main(int argc, char **argv)
 	philo_free_all(&philo, philo_threads);
 	return (0);
 }
-
-// clear; make ; valgrind --tool=helgrind ./philo 10 500 5 5

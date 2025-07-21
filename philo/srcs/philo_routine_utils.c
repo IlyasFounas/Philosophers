@@ -6,7 +6,7 @@
 /*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 15:27:30 by ifounas           #+#    #+#             */
-/*   Updated: 2025/07/21 14:23:28 by ifounas          ###   ########.fr       */
+/*   Updated: 2025/07/21 17:03:40 by ifounas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	philo_threads_release_forks(t_philo_threads *philo_threads)
 	pthread_mutex_unlock(&philo_threads->philo->forks[philo_threads->fork2]);
 }
 
-void philo_routine_take_fork(t_philo_threads *philo_threads, int nb_fork)
+void	philo_routine_take_fork(t_philo_threads *philo_threads, int nb_fork)
 {
 	pthread_mutex_lock(&philo_threads->philo->forks[nb_fork]);
 	philo_threads->philo->forks_tab[nb_fork] = 0;

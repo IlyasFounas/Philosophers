@@ -6,7 +6,7 @@
 /*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 13:39:11 by ifounas           #+#    #+#             */
-/*   Updated: 2025/07/21 11:18:47 by ifounas          ###   ########.fr       */
+/*   Updated: 2025/07/21 16:57:16 by ifounas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ typedef struct s_philo
 	long int		start_time;
 	int				*forks_tab;
 	int				stop_simualtion;
+	int				simulation_mut_failed;
+	int				stdout_mut_failed;
 	pthread_mutex_t	stop_simulation_mut;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	*last_eat_access;
