@@ -6,7 +6,7 @@
 /*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 13:39:11 by ifounas           #+#    #+#             */
-/*   Updated: 2025/03/19 10:49:41 by ifounas          ###   ########.fr       */
+/*   Updated: 2025/07/21 11:18:47 by ifounas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,50 +30,69 @@ typedef struct s_philo
 	long int		death_time;
 	long int		eat_time;
 	long int		sleep_time;
-	long int		think_time;
-	long int		many_times;
-	int				death;
-	struct timeval	time;
-	pthread_t		*philos;
+	long int		x_repeat;
+	long int		start_time;
+	int				*forks_tab;
+	int				stop_simualtion;
+	pthread_mutex_t	stop_simulation_mut;
 	pthread_mutex_t	*forks;
-	pthread_mutex_t	print;
-	suseconds_t		start;
+	pthread_mutex_t	*last_eat_access;
+	pthread_mutex_t	stdout_acces;
+	pthread_t		*philos;
+	pthread_t		track_death;
 }					t_philo;
 
-typedef struct s_philo_thread
+typedef struct s_philo_threads
 {
-	int				philo_id;
-	long int		last_meal;
-	int				died;
-	struct timeval	time;
+	long int		start_time;
+	long int		last_eat_time;
+	long int		meals;
+	int				thread_nb;
+	int				fork1;
+	int				fork2;
+	pthread_mutex_t	meals_mut;
 	t_philo			*philo;
-}					t_philo_thread;
+}					t_philo_threads;
 
-// philo_atoi
-long int			ft_atoi_error(const char *nptr);
+/*---------- philo_free --*/
+void				philo_free_all(t_philo *philo,
+						t_philo_threads *philo_threads);
 
-// philo_check
-void				check_args(int args);
-void				check_infos(t_philo *philo);
-void				check_someone_died(t_philo *philo, t_philo_thread *threads);
+/*---------- philo_init --*/
+void				philo_init_tab(t_philo *philo,
+						t_philo_threads **philo_threads);
+void				philo_init(t_philo *philo, char **argv);
+void				philo_init_threads(t_philo *philo,
+						t_philo_threads *philo_threads);
 
-// philo_free
-void				free_philo(t_philo *philo, int exit_code);
-void				free_threads(t_philo_thread *thread, t_philo *philo,
-						int exit_code);
+/*---------- philo_main --*/
+void				error_msg(t_philo *philo, char *x_repeat);
 
-// philo_init
-void				philo_init(t_philo *philo, long int nb_philo,
-						long int death_time, long int eat_time);
-void				time_init(t_philo *philo);
-void				time_init_thread(t_philo_thread *thread);
-void				forks_init(t_philo *philo);
-void				threads_init(t_philo *philo);
+/*---------- philo_process --*/
+void				*philo_monitor(void *arg);
+void				philo_process(t_philo *philo,
+						t_philo_threads *philo_threads);
 
-// philo_manage
-void				*manage_threads(void *arg);
+/*---------- philo_routine_utils --*/
+void				philo_threads_release_forks(t_philo_threads *philo_threads);
 
-// philo
-long int			get_absolute_time(long int t1, long int t2);
+/*---------- philo_routine --*/
+void				*philo_threads_routine(void *arg);
+void				philo_routine_take_fork(t_philo_threads *philo_threads,
+						int nb_fork);
+
+/*---------- philo_time --*/
+long int			return_actual_time(t_philo *philo,
+						t_philo_threads *philo_threads);
+void				last_eat_time(t_philo *philo,
+						t_philo_threads *philo_threads, int index);
+void				philo_init_time(t_philo *philo,
+						t_philo_threads *philo_threads);
+void				ms_sleep(t_philo *philo, t_philo_threads *philo_threads,
+						int x_time);
+
+/*---------- philo_utils --*/
+void				set_forks(t_philo_threads *philo_threads);
+long int			ft_atoi_ult(char *s, int *error);
 
 #endif
