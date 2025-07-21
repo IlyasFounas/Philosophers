@@ -24,6 +24,8 @@ void	philo_init_tab(t_philo *philo, t_philo_threads **philo_threads)
 	{
 		(*philo_threads)[i].philo = philo;
 		(*philo_threads)[i].thread_nb = i + 1;
+		(*philo_threads)[i].meals = 0;
+		(*philo_threads)[i].last_eat_time = return_actual_time(philo, NULL);
 		if (pthread_mutex_init(&(*philo_threads)[i].meals_mut, NULL) == -1)
 			philo_free_all(philo, NULL);
 	}
@@ -78,7 +80,7 @@ void philo_init_forks(t_philo *philo)
 
 	i = -1;
 	philo->forks_tab = malloc(philo->nb_philo * sizeof(int));
-	if (!philo->forks)
+	if (!philo->forks_tab)
 		philo_free_all(philo, NULL);
 	while (++i < philo->nb_philo)
 		philo->forks_tab[i] = 1;

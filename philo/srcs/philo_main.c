@@ -52,6 +52,7 @@ int	main(int argc, char **argv)
 	philo_init(&philo, argv);
 	philo_init_tab(&philo, &philo_threads);
 	philo_process(&philo, philo_threads);
+	philo_free_all(&philo, philo_threads);
 	return (0);
 }
 
