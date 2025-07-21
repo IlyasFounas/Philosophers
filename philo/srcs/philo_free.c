@@ -6,7 +6,7 @@
 /*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 15:46:50 by ifounas           #+#    #+#             */
-/*   Updated: 2025/06/24 11:51:27 by ifounas          ###   ########.fr       */
+/*   Updated: 2025/07/21 11:07:32 by ifounas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,3 +33,4 @@ void	philo_free_all(t_philo *philo, t_philo_threads *philo_threads)
 		free(philo_threads);
 	exit(1);
 }
+

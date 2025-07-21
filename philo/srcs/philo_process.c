@@ -6,13 +6,13 @@
 /*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 16:07:27 by ifounas           #+#    #+#             */
-/*   Updated: 2025/07/19 17:59:01 by ifounas          ###   ########.fr       */
+/*   Updated: 2025/07/21 14:11:09 by ifounas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	philo_check_eat_finished(t_philo_threads *philo_threads)
+static int	philo_check_eat_finished(t_philo_threads *philo_threads)
 {
 	int			i;
 	long int	j;
@@ -31,7 +31,26 @@ int	philo_check_eat_finished(t_philo_threads *philo_threads)
 	return (0);
 }
 
-void	*philo_track_death(void *arg)
+static int	philo_track_death(t_philo_threads *philo_threads, int i)
+{
+	long int	last_eat;
+	long int	current_time;
+
+	pthread_mutex_lock(&philo_threads[i].philo->last_eat_access[i]);
+	last_eat = philo_threads[i].last_eat_time;
+	current_time = return_actual_time(NULL, &philo_threads[i]);
+	pthread_mutex_unlock(&philo_threads[i].philo->last_eat_access[i]);
+	if (current_time - last_eat > philo_threads[i].philo->death_time)
+	{
+		pthread_mutex_lock(&philo_threads[i].philo->stdout_acces);
+		printf("%ld %d died\n", current_time, philo_threads[i].thread_nb);
+		pthread_mutex_unlock(&philo_threads[i].philo->stdout_acces);
+		return (1);
+	}
+	return (0);
+}
+
+void	*philo_monitor(void *arg)
 {
 	int				i;
 	int				y;
@@ -42,6 +61,7 @@ void	*philo_track_death(void *arg)
 	philo_threads = arg;
 	while (42)
 	{
+		usleep(5000);
 		if (philo_threads->philo->x_repeat != -1
 			&& philo_check_eat_finished(philo_threads) == 1)
 		{
@@ -50,10 +70,11 @@ void	*philo_track_death(void *arg)
 			pthread_mutex_unlock(&philo_threads->philo->stop_simulation_mut);
 			return (NULL);
 		}
+		if (philo_track_death(philo_threads, i) == 1)
+			exit(0);
 		i++;
 		if (i >= philo_threads->philo->nb_philo)
 			i = 0;
-		usleep(10000);
 	}
 }
 
@@ -70,20 +91,7 @@ void	philo_process(t_philo *philo, t_philo_threads *philo_threads)
 	}
 	while (++i < philo->nb_philo)
 		philo_init_time(NULL, &philo_threads[i]);
-	pthread_create(&philo->track_death, NULL, philo_track_death, philo_threads);
+	pthread_create(&philo->track_death, NULL, philo_monitor, philo_threads);
 	philo_init_threads(philo, philo_threads);
 	pthread_join(philo->track_death, NULL);
 }
-
-// pthread_mutex_lock(&philo_threads[i].philo->last_eat_access[i]);
-// last_eat = philo_threads[i].last_eat_time;
-// pthread_mutex_unlock(&philo_threads[i].philo->last_eat_access[i]);
-// if (return_actual_time(NULL, &philo_threads[i])
-// 	- last_eat > philo_threads[i].philo->death_time)
-// {
-// 	pthread_mutex_lock(&philo_threads[i].philo->stdout_acces);
-// 	printf("%ld %d died\n", return_actual_time(NULL, &philo_threads[i]),
-// 		philo_threads[i].thread_nb);
-// 	pthread_mutex_unlock(&philo_threads->philo->stdout_acces);
-// 	exit(0);
-// }

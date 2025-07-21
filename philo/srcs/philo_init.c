@@ -104,6 +104,7 @@ void	philo_init(t_philo *philo, char **argv)
 		printf("long int overflow\n");
 		exit(0);
 	}
+	error_msg(philo, argv[5]);
 	philo_init_mutex(philo);
 	philo_init_forks(philo);
 	if (pthread_mutex_init(&philo->stdout_acces, NULL) == -1)

@@ -6,7 +6,7 @@
 /*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 13:39:11 by ifounas           #+#    #+#             */
-/*   Updated: 2025/07/19 17:52:54 by ifounas          ###   ########.fr       */
+/*   Updated: 2025/07/21 11:18:47 by ifounas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,9 +66,10 @@ void				philo_init_threads(t_philo *philo,
 						t_philo_threads *philo_threads);
 
 /*---------- philo_main --*/
+void				error_msg(t_philo *philo, char *x_repeat);
 
 /*---------- philo_process --*/
-void				*philo_track_death(void *arg);
+void				*philo_monitor(void *arg);
 void				philo_process(t_philo *philo,
 						t_philo_threads *philo_threads);
 
