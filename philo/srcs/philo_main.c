@@ -44,7 +44,7 @@ int	main(int argc, char **argv)
 	philo_threads = NULL;
 	if (argc > 6 || argc < 4)
 	{
-		printf("./philo nb_philo death_time eat_time sleep_time (x_repeat)\n");
+		printf("./philo nb_philo death_time eat_time sleep_time (nb_meals)\n");
 		return (0);
 	}
 	memset(&philo, 0, sizeof(t_philo));
