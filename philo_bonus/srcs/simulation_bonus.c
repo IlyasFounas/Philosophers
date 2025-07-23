@@ -6,7 +6,7 @@
 /*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 17:44:04 by ifounas           #+#    #+#             */
-/*   Updated: 2025/07/22 17:59:41 by ifounas          ###   ########.fr       */
+/*   Updated: 2025/07/23 10:02:03 by ifounas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,9 @@ static void	free_pids(t_philo *philo, int i)
 
 static void	track_death(t_philo *philo)
 {
-		sem_wait(philo->write);
-		printf("%ld %d died\n", return_actual_time(philo),
-			philo_nb);
-		sem_post(philo->write);
+	sem_wait(philo->write);
+	// printf("%ld %d died\n", return_actual_time(philo), philo_nb);
+	sem_post(philo->write);
 	free_pids(philo, philo->nb_philo);
 	sem_post(philo->dead);
 }
@@ -51,9 +50,9 @@ static void	*monitor_check(void *arg)
 				break ;
 			}
 		}
-	    sem_wait(philo->dead);
+		sem_wait(philo->dead);
 		track_death(philo);
-        break ;
+		break ;
 	}
 	return (NULL);
 }

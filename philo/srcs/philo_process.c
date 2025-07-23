@@ -6,7 +6,7 @@
 /*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 16:07:27 by ifounas           #+#    #+#             */
-/*   Updated: 2025/07/21 15:28:54 by ifounas          ###   ########.fr       */
+/*   Updated: 2025/07/23 12:01:37 by ifounas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	*philo_monitor(void *arg)
 	t_philo_threads	*philo_threads;
 
 	i = 0;
-	y = 0;
+	y = -1;
 	philo_threads = arg;
 	while (42)
 	{
@@ -71,7 +71,9 @@ void	*philo_monitor(void *arg)
 			return (NULL);
 		}
 		if (philo_track_death(philo_threads, i) == 1)
+		{
 			exit(0);
+		}
 		i++;
 		if (i >= philo_threads->philo->nb_philo)
 			i = 0;
@@ -93,5 +95,11 @@ void	philo_process(t_philo *philo, t_philo_threads *philo_threads)
 		philo_init_time(NULL, &philo_threads[i]);
 	pthread_create(&philo->track_death, NULL, philo_monitor, philo_threads);
 	philo_init_threads(philo, philo_threads);
+	philo_free_all(philo, philo_threads);
 	pthread_join(philo->track_death, NULL);
+	i = -1;
+	if (philo->stop_simualtion == 1)
+		while (++i < philo->nb_philo)
+			pthread_join(philo->philos[i], NULL);
+	philo_free_all(philo, philo_threads);
 }

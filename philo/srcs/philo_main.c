@@ -42,7 +42,7 @@ int	main(int argc, char **argv)
 	t_philo_threads	*philo_threads;
 
 	philo_threads = NULL;
-	if (argc > 6 || argc < 4)
+	if (argc <= 4 || argc > 6)
 	{
 		printf("./philo nb_philo death_time eat_time sleep_time (nb_meals)\n");
 		return (0);
@@ -51,6 +51,8 @@ int	main(int argc, char **argv)
 	philo_init(&philo, argv);
 	philo_init_tab(&philo, &philo_threads);
 	philo_process(&philo, philo_threads);
-	philo_free_all(&philo, philo_threads);
 	return (0);
 }
+
+// exit
+// forks
