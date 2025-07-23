@@ -6,7 +6,7 @@
 /*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 15:27:25 by ifounas           #+#    #+#             */
-/*   Updated: 2025/07/21 16:28:24 by ifounas          ###   ########.fr       */
+/*   Updated: 2025/07/23 16:11:09 by ifounas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@ static void	philo_threads_eating(t_philo_threads *philo_threads)
 	printf("%ld %d is eating\n", return_actual_time(NULL, philo_threads),
 		philo_threads->thread_nb);
 	pthread_mutex_unlock(&philo_threads->philo->stdout_acces);
-	pthread_mutex_lock(philo_threads->philo->last_eat_access);
+	pthread_mutex_lock(&philo_threads->philo->last_eat_access[philo_threads->thread_nb - 1]);
 	philo_threads->last_eat_time = return_actual_time(NULL, philo_threads);
-	pthread_mutex_unlock(philo_threads->philo->last_eat_access);
+	pthread_mutex_unlock(&philo_threads->philo->last_eat_access[philo_threads->thread_nb - 1]);
 	ms_sleep(NULL, philo_threads, philo_threads->philo->eat_time);
 	philo_threads_release_forks(philo_threads);
 	pthread_mutex_lock(&philo_threads->meals_mut);

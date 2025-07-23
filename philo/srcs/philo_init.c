@@ -2,9 +2,12 @@
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   philo_init.c                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
+/*                                                    +:+ +:+
+	+:+     */
+/*   By: ifounas <ifounas@student.42.fr>            +#+  +:+
+	+#+        */
+/*                                                +#+#+#+#+#+
+	+#+           */
 /*   Created: 2025/07/21 17:00:52 by ifounas           #+#    #+#             */
 /*   Updated: 2025/07/21 17:00:52 by ifounas          ###   ########.fr       */
 /*                                                                            */
@@ -12,9 +15,10 @@
 
 #include "philo.h"
 
+
 void	philo_init_tab(t_philo *philo, t_philo_threads **philo_threads)
 {
-	int		i;
+	int i;
 
 	i = -1;
 	*philo_threads = malloc((philo->nb_philo) * sizeof(t_philo_threads));
@@ -60,8 +64,8 @@ static void	philo_init_mutex(t_philo *philo, int i)
 
 void	philo_init_threads(t_philo *philo, t_philo_threads *philo_threads)
 {
-	int		i;
-	int		j;
+	int i;
+	int j;
 
 	i = -1;
 	j = -1;
@@ -75,13 +79,20 @@ void	philo_init_threads(t_philo *philo, t_philo_threads *philo_threads)
 			philo_free_all(philo, philo_threads);
 		}
 	}
+	if (philo_monitor(philo_threads) == 1)
+	{
+		while (++j < philo_threads->philo->nb_philo)
+			pthread_detach(philo_threads->philo->philos[j]);
+		pthread_mutex_unlock(&philo->stdout_acces);
+		return ;
+	}
 	while (++j < philo->nb_philo)
 		pthread_join(philo->philos[j], NULL);
 }
 
 void	philo_init_forks(t_philo *philo)
 {
-	int		i;
+	int i;
 
 	i = -1;
 	philo->forks_tab = malloc(philo->nb_philo * sizeof(int));
@@ -94,7 +105,7 @@ void	philo_init_forks(t_philo *philo)
 
 void	philo_init(t_philo *philo, char **argv)
 {
-	int		error;
+	int error;
 
 	error = 0;
 	philo_init_time(philo, NULL);

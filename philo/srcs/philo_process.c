@@ -6,7 +6,7 @@
 /*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 16:07:27 by ifounas           #+#    #+#             */
-/*   Updated: 2025/07/23 12:01:37 by ifounas          ###   ########.fr       */
+/*   Updated: 2025/07/23 15:48:29 by ifounas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,21 +44,18 @@ static int	philo_track_death(t_philo_threads *philo_threads, int i)
 	{
 		pthread_mutex_lock(&philo_threads[i].philo->stdout_acces);
 		printf("%ld %d died\n", current_time, philo_threads[i].thread_nb);
-		pthread_mutex_unlock(&philo_threads[i].philo->stdout_acces);
 		return (1);
 	}
 	return (0);
 }
 
-void	*philo_monitor(void *arg)
+int	philo_monitor(t_philo_threads *philo_threads)
 {
-	int				i;
-	int				y;
-	t_philo_threads	*philo_threads;
+	int	i;
+	int	y;
 
 	i = 0;
 	y = -1;
-	philo_threads = arg;
 	while (42)
 	{
 		usleep(5000);
@@ -68,12 +65,10 @@ void	*philo_monitor(void *arg)
 			pthread_mutex_lock(&philo_threads->philo->stop_simulation_mut);
 			philo_threads->philo->stop_simualtion = 1;
 			pthread_mutex_unlock(&philo_threads->philo->stop_simulation_mut);
-			return (NULL);
+			return (0);
 		}
 		if (philo_track_death(philo_threads, i) == 1)
-		{
-			exit(0);
-		}
+			return (1);
 		i++;
 		if (i >= philo_threads->philo->nb_philo)
 			i = 0;
@@ -93,13 +88,6 @@ void	philo_process(t_philo *philo, t_philo_threads *philo_threads)
 	}
 	while (++i < philo->nb_philo)
 		philo_init_time(NULL, &philo_threads[i]);
-	pthread_create(&philo->track_death, NULL, philo_monitor, philo_threads);
 	philo_init_threads(philo, philo_threads);
-	philo_free_all(philo, philo_threads);
-	pthread_join(philo->track_death, NULL);
-	i = -1;
-	if (philo->stop_simualtion == 1)
-		while (++i < philo->nb_philo)
-			pthread_join(philo->philos[i], NULL);
 	philo_free_all(philo, philo_threads);
 }
