@@ -6,7 +6,7 @@
 /*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 13:39:11 by ifounas           #+#    #+#             */
-/*   Updated: 2025/07/23 14:24:22 by ifounas          ###   ########.fr       */
+/*   Updated: 2025/07/24 13:14:54 by ifounas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,18 @@
 # include <sys/wait.h>
 # include <unistd.h>
 
+typedef struct s_philo_mut
+{
+	int				simulation_mut_failed;
+	int				stdout_mut_failed;
+	int				dead_mut_failed;
+	pthread_mutex_t	dead_philo_mut;
+	pthread_mutex_t	stop_simulation_mut;
+	pthread_mutex_t	*forks;
+	pthread_mutex_t	*last_eat_access;
+	pthread_mutex_t	stdout_acces;
+}					t_philo_mut;
+
 typedef struct s_philo
 {
 	long int		nb_philo;
@@ -34,13 +46,9 @@ typedef struct s_philo
 	long int		start_time;
 	int				*forks_tab;
 	int				stop_simualtion;
-	int				simulation_mut_failed;
-	int				stdout_mut_failed;
-	pthread_mutex_t	stop_simulation_mut;
-	pthread_mutex_t	*forks;
-	pthread_mutex_t	*last_eat_access;
-	pthread_mutex_t	stdout_acces;
+	int				dead_philo;
 	pthread_t		*philos;
+	t_philo_mut		all_mutex;
 }					t_philo;
 
 typedef struct s_philo_threads
@@ -75,12 +83,13 @@ void				philo_process(t_philo *philo,
 						t_philo_threads *philo_threads);
 
 /*---------- philo_routine_utils --*/
+int					stdout_open(t_philo *philo);
 void				philo_threads_release_forks(t_philo_threads *philo_threads);
+void				philo_routine_take_fork(t_philo_threads *philo_threads,
+						int nb_fork);
 
 /*---------- philo_routine --*/
 void				*philo_threads_routine(void *arg);
-void				philo_routine_take_fork(t_philo_threads *philo_threads,
-						int nb_fork);
 
 /*---------- philo_time --*/
 long int			return_actual_time(t_philo *philo,

@@ -6,7 +6,7 @@
 /*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 14:17:41 by ifounas           #+#    #+#             */
-/*   Updated: 2025/07/21 17:04:07 by ifounas          ###   ########.fr       */
+/*   Updated: 2025/07/24 13:21:54 by ifounas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,9 @@ void	last_eat_time(t_philo *philo, t_philo_threads *philo_threads, int index)
 {
 	if (philo_threads)
 	{
-		pthread_mutex_lock(&philo->last_eat_access[index]);
+		pthread_mutex_lock(&philo->all_mutex.last_eat_access[index]);
 		philo_threads->last_eat_time = return_actual_time(NULL, philo_threads);
-		pthread_mutex_unlock(&philo->last_eat_access[index]);
+		pthread_mutex_unlock(&philo->all_mutex.last_eat_access[index]);
 	}
 	return ;
 }

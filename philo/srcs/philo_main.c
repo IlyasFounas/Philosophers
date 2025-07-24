@@ -48,11 +48,9 @@ int	main(int argc, char **argv)
 		return (0);
 	}
 	memset(&philo, 0, sizeof(t_philo));
+	memset(&philo.all_mutex, 0, sizeof(t_philo_mut));
 	philo_init(&philo, argv);
 	philo_init_tab(&philo, &philo_threads);
 	philo_process(&philo, philo_threads);
 	return (0);
 }
-
-// exit
-// forks

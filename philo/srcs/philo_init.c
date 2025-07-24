@@ -2,23 +2,19 @@
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   philo_init.c                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+
-	+:+     */
-/*   By: ifounas <ifounas@student.42.fr>            +#+  +:+
-	+#+        */
-/*                                                +#+#+#+#+#+
-	+#+           */
-/*   Created: 2025/07/21 17:00:52 by ifounas           #+#    #+#             */
-/*   Updated: 2025/07/21 17:00:52 by ifounas          ###   ########.fr       */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/24 11:32:25 by ifounas           #+#    #+#             */
+/*   Updated: 2025/07/24 11:32:25 by ifounas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-
 void	philo_init_tab(t_philo *philo, t_philo_threads **philo_threads)
 {
-	int i;
+	int	i;
 
 	i = -1;
 	*philo_threads = malloc((philo->nb_philo) * sizeof(t_philo_threads));
@@ -37,35 +33,40 @@ void	philo_init_tab(t_philo *philo, t_philo_threads **philo_threads)
 
 static void	philo_init_mutex(t_philo *philo, int i)
 {
-	if (pthread_mutex_init(&philo->stdout_acces, NULL) == -1)
+	if (pthread_mutex_init(&philo->all_mutex.stdout_acces, NULL) == -1)
 	{
-		philo->stdout_mut_failed = 1;
+		philo->all_mutex.stdout_mut_failed = 1;
 		philo_free_all(philo, NULL);
 	}
-	if (pthread_mutex_init(&philo->stop_simulation_mut, NULL) == -1)
+	if (pthread_mutex_init(&philo->all_mutex.dead_philo_mut, NULL) == -1)
 	{
-		philo->simulation_mut_failed = 1;
+		philo->all_mutex.dead_mut_failed = 1;
 		philo_free_all(philo, NULL);
 	}
-	philo->forks = malloc(philo->nb_philo * sizeof(pthread_mutex_t));
-	if (!philo->forks)
+	if (pthread_mutex_init(&philo->all_mutex.stop_simulation_mut, NULL) == -1)
+	{
+		philo->all_mutex.simulation_mut_failed = 1;
 		philo_free_all(philo, NULL);
-	philo->last_eat_access = malloc(philo->nb_philo * sizeof(pthread_mutex_t));
-	if (!philo->last_eat_access)
+	}
+	philo->all_mutex.forks = malloc(philo->nb_philo * sizeof(pthread_mutex_t));
+	if (!philo->all_mutex.forks)
+		philo_free_all(philo, NULL);
+	philo->all_mutex.last_eat_access = malloc(philo->nb_philo * sizeof(pthread_mutex_t));
+	if (!philo->all_mutex.last_eat_access)
 		philo_free_all(philo, NULL);
 	while (++i < philo->nb_philo)
 	{
-		if (pthread_mutex_init(&philo->forks[i], NULL) == -1)
+		if (pthread_mutex_init(&philo->all_mutex.forks[i], NULL) == -1)
 			philo_free_all(philo, NULL);
-		if (pthread_mutex_init(&philo->last_eat_access[i], NULL) == -1)
+		if (pthread_mutex_init(&philo->all_mutex.last_eat_access[i], NULL) == -1)
 			philo_free_all(philo, NULL);
 	}
 }
 
 void	philo_init_threads(t_philo *philo, t_philo_threads *philo_threads)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
 	i = -1;
 	j = -1;
@@ -79,20 +80,14 @@ void	philo_init_threads(t_philo *philo, t_philo_threads *philo_threads)
 			philo_free_all(philo, philo_threads);
 		}
 	}
-	if (philo_monitor(philo_threads) == 1)
-	{
-		while (++j < philo_threads->philo->nb_philo)
-			pthread_detach(philo_threads->philo->philos[j]);
-		pthread_mutex_unlock(&philo->stdout_acces);
-		return ;
-	}
+	philo_monitor(philo_threads);
 	while (++j < philo->nb_philo)
 		pthread_join(philo->philos[j], NULL);
 }
 
 void	philo_init_forks(t_philo *philo)
 {
-	int i;
+	int	i;
 
 	i = -1;
 	philo->forks_tab = malloc(philo->nb_philo * sizeof(int));
@@ -105,7 +100,7 @@ void	philo_init_forks(t_philo *philo)
 
 void	philo_init(t_philo *philo, char **argv)
 {
-	int error;
+	int	error;
 
 	error = 0;
 	philo_init_time(philo, NULL);
