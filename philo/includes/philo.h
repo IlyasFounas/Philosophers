@@ -6,7 +6,7 @@
 /*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 13:39:11 by ifounas           #+#    #+#             */
-/*   Updated: 2025/07/24 13:14:54 by ifounas          ###   ########.fr       */
+/*   Updated: 2025/07/26 15:39:37 by ifounas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ void				ms_sleep(t_philo *philo, t_philo_threads *philo_threads,
 						int x_time);
 
 /*---------- philo_utils --*/
+void				philo_init_mutex(t_philo *philo, int i);
 void				set_forks(t_philo_threads *philo_threads);
 long int			ft_atoi_ult(char *s, int *error);
 

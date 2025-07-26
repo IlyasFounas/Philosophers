@@ -5,12 +5,51 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/21 17:04:29 by ifounas           #+#    #+#             */
-/*   Updated: 2025/07/21 17:04:29 by ifounas          ###   ########.fr       */
+/*   Created: 2025/07/26 15:28:41 by ifounas           #+#    #+#             */
+/*   Updated: 2025/07/26 15:28:41 by ifounas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+static void	philo_simple_mutex(t_philo *philo)
+{
+	if (pthread_mutex_init(&philo->all_mutex.stdout_acces, NULL) == -1)
+	{
+		philo->all_mutex.stdout_mut_failed = 1;
+		philo_free_all(philo, NULL);
+	}
+	if (pthread_mutex_init(&philo->all_mutex.dead_philo_mut, NULL) == -1)
+	{
+		philo->all_mutex.dead_mut_failed = 1;
+		philo_free_all(philo, NULL);
+	}
+	if (pthread_mutex_init(&philo->all_mutex.stop_simulation_mut, NULL) == -1)
+	{
+		philo->all_mutex.simulation_mut_failed = 1;
+		philo_free_all(philo, NULL);
+	}
+}
+
+void	philo_init_mutex(t_philo *philo, int i)
+{
+	philo_simple_mutex(philo);
+	philo->all_mutex.forks = malloc(philo->nb_philo * sizeof(pthread_mutex_t));
+	if (!philo->all_mutex.forks)
+		philo_free_all(philo, NULL);
+	philo->all_mutex.last_eat_access = malloc(philo->nb_philo
+			* sizeof(pthread_mutex_t));
+	if (!philo->all_mutex.last_eat_access)
+		philo_free_all(philo, NULL);
+	while (++i < philo->nb_philo)
+	{
+		if (pthread_mutex_init(&philo->all_mutex.forks[i], NULL) == -1)
+			philo_free_all(philo, NULL);
+		if (pthread_mutex_init(&philo->all_mutex.last_eat_access[i], NULL)
+			== -1)
+			philo_free_all(philo, NULL);
+	}
+}
 
 void	set_forks(t_philo_threads *philo_threads)
 {

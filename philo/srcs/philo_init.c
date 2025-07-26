@@ -31,38 +31,6 @@ void	philo_init_tab(t_philo *philo, t_philo_threads **philo_threads)
 	}
 }
 
-static void	philo_init_mutex(t_philo *philo, int i)
-{
-	if (pthread_mutex_init(&philo->all_mutex.stdout_acces, NULL) == -1)
-	{
-		philo->all_mutex.stdout_mut_failed = 1;
-		philo_free_all(philo, NULL);
-	}
-	if (pthread_mutex_init(&philo->all_mutex.dead_philo_mut, NULL) == -1)
-	{
-		philo->all_mutex.dead_mut_failed = 1;
-		philo_free_all(philo, NULL);
-	}
-	if (pthread_mutex_init(&philo->all_mutex.stop_simulation_mut, NULL) == -1)
-	{
-		philo->all_mutex.simulation_mut_failed = 1;
-		philo_free_all(philo, NULL);
-	}
-	philo->all_mutex.forks = malloc(philo->nb_philo * sizeof(pthread_mutex_t));
-	if (!philo->all_mutex.forks)
-		philo_free_all(philo, NULL);
-	philo->all_mutex.last_eat_access = malloc(philo->nb_philo * sizeof(pthread_mutex_t));
-	if (!philo->all_mutex.last_eat_access)
-		philo_free_all(philo, NULL);
-	while (++i < philo->nb_philo)
-	{
-		if (pthread_mutex_init(&philo->all_mutex.forks[i], NULL) == -1)
-			philo_free_all(philo, NULL);
-		if (pthread_mutex_init(&philo->all_mutex.last_eat_access[i], NULL) == -1)
-			philo_free_all(philo, NULL);
-	}
-}
-
 void	philo_init_threads(t_philo *philo, t_philo_threads *philo_threads)
 {
 	int	i;
