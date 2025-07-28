@@ -104,7 +104,7 @@ long int	ft_atoi_ult(char *s, int *error)
 			neg = -1;
 		i++;
 	}
-	while (s[i])
+	while (s[i] && (s[i] >= '0' && s[i] <= '9'))
 	{
 		if (nb > ((LLONG_MAX - (s[i] - 48)) / 10))
 			*error = 1;
