@@ -82,7 +82,7 @@ void	philo_init(t_philo *philo, char **argv)
 		philo->x_repeat = -1;
 	if (error == 1)
 	{
-		printf("long int overflow\n");
+		write(2, "long int overflow\n", 18);
 		exit(1);
 	}
 	error_msg(philo, argv[5]);

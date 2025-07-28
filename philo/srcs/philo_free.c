@@ -6,7 +6,7 @@
 /*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 15:46:50 by ifounas           #+#    #+#             */
-/*   Updated: 2025/07/24 13:17:24 by ifounas          ###   ########.fr       */
+/*   Updated: 2025/07/28 11:46:33 by ifounas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,5 +51,7 @@ void	philo_free_all(t_philo *philo, t_philo_threads *philo_threads)
 		free(philo->all_mutex.last_eat_access);
 	if (philo_threads)
 		free(philo_threads);
+	if (philo->exit_option == 1)
+		exit(1);
 	exit(0);
 }

@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/26 15:28:41 by ifounas           #+#    #+#             */
-/*   Updated: 2025/07/26 15:28:41 by ifounas          ###   ########.fr       */
+/*   Created: 2025/07/28 11:42:05 by ifounas           #+#    #+#             */
+/*   Updated: 2025/07/28 11:42:05 by ifounas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,24 @@ static void	philo_simple_mutex(t_philo *philo)
 	}
 }
 
+void	mutex_init_failed(t_philo *philo, int i, int first)
+{
+	write(2, "init mutex failed\n", 18);
+	philo->exit_option = 1;
+	if (first == 0)
+		pthread_mutex_destroy(&philo->all_mutex.forks[i]);
+	while (--i >= 0)
+	{
+		pthread_mutex_destroy(&philo->all_mutex.forks[i]);
+		pthread_mutex_destroy(&philo->all_mutex.last_eat_access[i]);
+	}
+	free(philo->all_mutex.forks);
+	free(philo->all_mutex.last_eat_access);
+	philo->all_mutex.forks = NULL;
+	philo->all_mutex.last_eat_access = NULL;
+	philo_free_all(philo, NULL);
+}
+
 void	philo_init_mutex(t_philo *philo, int i)
 {
 	philo_simple_mutex(philo);
@@ -44,10 +62,10 @@ void	philo_init_mutex(t_philo *philo, int i)
 	while (++i < philo->nb_philo)
 	{
 		if (pthread_mutex_init(&philo->all_mutex.forks[i], NULL) == -1)
-			philo_free_all(philo, NULL);
-		if (pthread_mutex_init(&philo->all_mutex.last_eat_access[i], NULL)
-			== -1)
-			philo_free_all(philo, NULL);
+			mutex_init_failed(philo, i, 1);
+		if (pthread_mutex_init(&philo
+				->all_mutex.last_eat_access[i], NULL) == -1)
+			mutex_init_failed(philo, i, 0);
 	}
 }
 
