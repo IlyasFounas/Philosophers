@@ -6,7 +6,7 @@
 /*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 16:07:27 by ifounas           #+#    #+#             */
-/*   Updated: 2025/07/28 13:10:29 by ifounas          ###   ########.fr       */
+/*   Updated: 2025/07/31 15:06:55 by ifounas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,20 +41,20 @@ static int	philo_track_death(t_philo_threads *philo_threads, int i)
 	current_time = return_actual_time(NULL, &philo_threads[i]);
 	pthread_mutex_unlock(&philo_threads[i].philo->all_mutex.last_eat_access[i]);
 	if (current_time - last_eat > philo_threads[i].philo->death_time)
-	{
-		pthread_mutex_lock(&philo_threads[i].philo->all_mutex.stdout_acces);
-		printf("%ld %d died\n", current_time, philo_threads[i].thread_nb);
-		pthread_mutex_unlock(&philo_threads[i].philo->all_mutex.stdout_acces);
-		pthread_mutex_lock(
-			&philo_threads->philo->all_mutex.stop_simulation_mut);
-		philo_threads->philo->stop_simualtion = 1;
-		pthread_mutex_unlock(
-			&philo_threads->philo->all_mutex.stop_simulation_mut);
+	{		
 		pthread_mutex_lock(
 			&philo_threads->philo->all_mutex.dead_philo_mut);
 		philo_threads->philo->dead_philo = 1;
 		pthread_mutex_unlock(
 			&philo_threads->philo->all_mutex.dead_philo_mut);
+		pthread_mutex_lock(
+			&philo_threads->philo->all_mutex.stop_simulation_mut);
+		philo_threads->philo->stop_simualtion = 1;
+		pthread_mutex_unlock(
+			&philo_threads->philo->all_mutex.stop_simulation_mut);
+		pthread_mutex_lock(&philo_threads[i].philo->all_mutex.stdout_acces);
+		printf("%ld %d died\n", current_time, philo_threads[i].thread_nb);
+		pthread_mutex_unlock(&philo_threads[i].philo->all_mutex.stdout_acces);
 		return (1);
 	}
 	return (0);
@@ -67,9 +67,12 @@ void	philo_monitor(t_philo_threads *philo_threads)
 
 	i = 0;
 	y = -1;
+	pthread_mutex_lock(&philo_threads->philo->all_mutex.start_simulation_mut);
+	pthread_mutex_unlock(&philo_threads->philo->all_mutex.start_simulation_mut);
 	while (42)
 	{
-		usleep(5000);
+		if (philo_track_death(philo_threads, i) == 1)
+			return ;
 		if (philo_threads->philo->x_repeat != -1
 			&& philo_check_eat_finished(philo_threads) == 1)
 		{
@@ -80,8 +83,6 @@ void	philo_monitor(t_philo_threads *philo_threads)
 				&philo_threads->philo->all_mutex.stop_simulation_mut);
 			return ;
 		}
-		if (philo_track_death(philo_threads, i) == 1)
-			return ;
 		i++;
 		if (i >= philo_threads->philo->nb_philo)
 			i = 0;

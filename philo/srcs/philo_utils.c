@@ -2,15 +2,19 @@
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   philo_utils.c                                      :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
+/*                                                    +:+ +:+
+	+:+     */
+/*   By: ifounas <ifounas@student.42.fr>            +#+  +:+
+	+#+        */
+/*                                                +#+#+#+#+#+
+	+#+           */
 /*   Created: 2025/07/28 11:42:05 by ifounas           #+#    #+#             */
 /*   Updated: 2025/07/28 11:42:05 by ifounas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
 
 static void	philo_simple_mutex(t_philo *philo)
 {
@@ -27,6 +31,16 @@ static void	philo_simple_mutex(t_philo *philo)
 	if (pthread_mutex_init(&philo->all_mutex.stop_simulation_mut, NULL) == -1)
 	{
 		philo->all_mutex.simulation_mut_failed = 1;
+		philo_free_all(philo, NULL);
+	}
+	if (pthread_mutex_init(&philo->all_mutex.start_simulation_mut, NULL) == -1)
+	{
+		philo->all_mutex.start_mut_failed = 1;
+		philo_free_all(philo, NULL);
+	}
+	if (pthread_mutex_init(&philo->all_mutex.threads_mut, NULL) == -1)
+	{
+		philo->all_mutex.threads_mut_failed = 1;
 		philo_free_all(philo, NULL);
 	}
 }
@@ -63,35 +77,32 @@ void	philo_init_mutex(t_philo *philo, int i)
 	{
 		if (pthread_mutex_init(&philo->all_mutex.forks[i], NULL) == -1)
 			mutex_init_failed(philo, i, 1);
-		if (pthread_mutex_init(&philo
-				->all_mutex.last_eat_access[i], NULL) == -1)
+		if (pthread_mutex_init(&philo->all_mutex.last_eat_access[i], NULL) ==
+			-1)
 			mutex_init_failed(philo, i, 0);
 	}
 }
 
 void	set_forks(t_philo_threads *philo_threads)
 {
-	int	fork1;
-	int	fork2;
-	int	tmp;
+	// int tmp;
 
-	fork1 = philo_threads->thread_nb - 1;
-	fork2 = philo_threads->thread_nb % philo_threads->philo->nb_philo;
-	if (fork1 % 2 == 1)
-	{
-		tmp = fork1;
-		fork1 = fork2;
-		fork2 = tmp;
-	}
-	philo_threads->fork1 = fork1;
-	philo_threads->fork2 = fork2;
+	philo_threads->fork1 = philo_threads->thread_nb - 1;
+	philo_threads->fork2 = philo_threads->thread_nb
+		% philo_threads->philo->nb_philo;
+	// if (philo_threads->thread_nb % 2 == 0)
+	// {
+	// 	tmp = philo_threads->fork1;
+	// 	philo_threads->fork1 = philo_threads->fork2;
+	// 	philo_threads->fork2 = tmp;
+	// }
 }
 
 long int	ft_atoi_ult(char *s, int *error)
 {
-	int			i;
-	long int	nb;
-	int			neg;
+	int i;
+	long int nb;
+	int neg;
 
 	i = 0;
 	nb = 0;

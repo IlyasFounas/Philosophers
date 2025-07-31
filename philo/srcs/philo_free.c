@@ -6,7 +6,7 @@
 /*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 15:46:50 by ifounas           #+#    #+#             */
-/*   Updated: 2025/07/28 11:46:33 by ifounas          ###   ########.fr       */
+/*   Updated: 2025/07/29 13:20:01 by ifounas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,10 @@ static void	destroy_mutex(t_philo *philo, t_philo_threads *philo_threads)
 		pthread_mutex_destroy(&philo->all_mutex.dead_philo_mut);
 	if (philo->all_mutex.simulation_mut_failed == 0)
 		pthread_mutex_destroy(&philo->all_mutex.stop_simulation_mut);
+	if (philo->all_mutex.start_mut_failed == 0)
+		pthread_mutex_destroy(&philo->all_mutex.start_simulation_mut);
+	if (philo->all_mutex.threads_mut_failed == 0)
+		pthread_mutex_destroy(&philo->all_mutex.threads_mut);
 	if (philo_threads)
 		pthread_mutex_destroy(&philo_threads->meals_mut);
 	if (philo->all_mutex.forks && philo->all_mutex.last_eat_access)

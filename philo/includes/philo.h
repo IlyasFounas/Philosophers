@@ -6,7 +6,7 @@
 /*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 13:39:11 by ifounas           #+#    #+#             */
-/*   Updated: 2025/07/28 13:11:14 by ifounas          ###   ########.fr       */
+/*   Updated: 2025/07/29 13:24:54 by ifounas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,15 @@ typedef struct s_philo_mut
 	int				simulation_mut_failed;
 	int				stdout_mut_failed;
 	int				dead_mut_failed;
-	pthread_mutex_t	dead_philo_mut;
-	pthread_mutex_t	stop_simulation_mut;
+	int				start_mut_failed;
+	int				threads_mut_failed;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	*last_eat_access;
+	pthread_mutex_t	dead_philo_mut;
 	pthread_mutex_t	stdout_acces;
+	pthread_mutex_t	threads_mut;
+	pthread_mutex_t	stop_simulation_mut;
+	pthread_mutex_t	start_simulation_mut;
 }					t_philo_mut;
 
 typedef struct s_philo
@@ -48,6 +52,7 @@ typedef struct s_philo
 	int				stop_simualtion;
 	int				dead_philo;
 	int				exit_option;
+	int				all_threads_ready;
 	pthread_t		*philos;
 	t_philo_mut		all_mutex;
 }					t_philo;

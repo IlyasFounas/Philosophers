@@ -6,7 +6,7 @@
 /*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 15:27:30 by ifounas           #+#    #+#             */
-/*   Updated: 2025/07/26 16:14:33 by ifounas          ###   ########.fr       */
+/*   Updated: 2025/07/31 11:44:11 by ifounas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,9 @@ void	philo_routine_take_fork(t_philo_threads *philo_threads, int nb_fork)
 	all_mutex = &philo_threads->philo->all_mutex;
 	pthread_mutex_lock(&all_mutex->forks[nb_fork]);
 	philo_threads->philo->forks_tab[nb_fork] = 0;
+	pthread_mutex_lock(&all_mutex->stdout_acces);
 	if (stdout_open(philo_threads->philo) == 1)
-	{
-		pthread_mutex_lock(&all_mutex->stdout_acces);
-		printf("%ld %d has taken a fork\n", return_actual_time(NULL,
-				philo_threads), philo_threads->thread_nb);
-		pthread_mutex_unlock(&all_mutex->stdout_acces);
-	}
+		printf("%ld %d has taken a fork %d\n", return_actual_time(NULL,
+				philo_threads), philo_threads->thread_nb, nb_fork);
+	pthread_mutex_unlock(&all_mutex->stdout_acces);
 }

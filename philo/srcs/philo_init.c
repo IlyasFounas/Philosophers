@@ -2,9 +2,12 @@
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   philo_init.c                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
+/*                                                    +:+ +:+        
+	+:+     */
+/*   By: ifounas <ifounas@student.42.fr>            +#+  +:+      
+	+#+        */
+/*                                                +#+#+#+#+#+  
+	+#+           */
 /*   Created: 2025/07/24 11:32:25 by ifounas           #+#    #+#             */
 /*   Updated: 2025/07/24 11:32:25 by ifounas          ###   ########.fr       */
 /*                                                                            */
@@ -12,9 +15,10 @@
 
 #include "philo.h"
 
+
 void	philo_init_tab(t_philo *philo, t_philo_threads **philo_threads)
 {
-	int	i;
+	int i;
 
 	i = -1;
 	*philo_threads = malloc((philo->nb_philo) * sizeof(t_philo_threads));
@@ -33,11 +37,12 @@ void	philo_init_tab(t_philo *philo, t_philo_threads **philo_threads)
 
 void	philo_init_threads(t_philo *philo, t_philo_threads *philo_threads)
 {
-	int	i;
-	int	j;
+	int i;
+	int j;
 
 	i = -1;
 	j = -1;
+	pthread_mutex_lock(&philo->all_mutex.start_simulation_mut);
 	while (++i < philo->nb_philo)
 	{
 		if (pthread_create(&philo->philos[i], NULL, philo_threads_routine,
@@ -48,6 +53,7 @@ void	philo_init_threads(t_philo *philo, t_philo_threads *philo_threads)
 			philo_free_all(philo, philo_threads);
 		}
 	}
+	pthread_mutex_unlock(&philo->all_mutex.start_simulation_mut);
 	philo_monitor(philo_threads);
 	while (++j < philo->nb_philo)
 		pthread_join(philo->philos[j], NULL);
@@ -55,7 +61,7 @@ void	philo_init_threads(t_philo *philo, t_philo_threads *philo_threads)
 
 void	philo_init_forks(t_philo *philo)
 {
-	int	i;
+	int i;
 
 	i = -1;
 	philo->forks_tab = malloc(philo->nb_philo * sizeof(int));
@@ -68,7 +74,7 @@ void	philo_init_forks(t_philo *philo)
 
 void	philo_init(t_philo *philo, char **argv)
 {
-	int	error;
+	int error;
 
 	error = 0;
 	philo_init_time(philo, NULL);
