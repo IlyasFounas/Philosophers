@@ -42,7 +42,7 @@ void	philo_init_threads(t_philo *philo, t_philo_threads *philo_threads)
 
 	i = -1;
 	j = -1;
-	pthread_mutex_lock(&philo->all_mutex.start_simulation_mut);
+	// pthread_mutex_lock(&philo->all_mutex.start_simulation_mut);
 	while (++i < philo->nb_philo)
 	{
 		if (pthread_create(&philo->philos[i], NULL, philo_threads_routine,
@@ -53,7 +53,7 @@ void	philo_init_threads(t_philo *philo, t_philo_threads *philo_threads)
 			philo_free_all(philo, philo_threads);
 		}
 	}
-	pthread_mutex_unlock(&philo->all_mutex.start_simulation_mut);
+	// pthread_mutex_unlock(&philo->all_mutex.start_simulation_mut);
 	philo_monitor(philo_threads);
 	while (++j < philo->nb_philo)
 		pthread_join(philo->philos[j], NULL);

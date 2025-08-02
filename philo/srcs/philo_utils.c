@@ -85,17 +85,17 @@ void	philo_init_mutex(t_philo *philo, int i)
 
 void	set_forks(t_philo_threads *philo_threads)
 {
-	// int tmp;
+	int tmp;
 
 	philo_threads->fork1 = philo_threads->thread_nb - 1;
 	philo_threads->fork2 = philo_threads->thread_nb
 		% philo_threads->philo->nb_philo;
-	// if (philo_threads->thread_nb % 2 == 0)
-	// {
-	// 	tmp = philo_threads->fork1;
-	// 	philo_threads->fork1 = philo_threads->fork2;
-	// 	philo_threads->fork2 = tmp;
-	// }
+	if (philo_threads->thread_nb % 2 != 0)
+	{
+		tmp = philo_threads->fork1;
+		philo_threads->fork1 = philo_threads->fork2;
+		philo_threads->fork2 = tmp;
+	}
 }
 
 long int	ft_atoi_ult(char *s, int *error)
