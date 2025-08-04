@@ -6,7 +6,7 @@
 /*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 14:17:41 by ifounas           #+#    #+#             */
-/*   Updated: 2025/07/30 14:34:15 by ifounas          ###   ########.fr       */
+/*   Updated: 2025/08/04 16:35:49 by ifounas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,16 @@ void	philo_init_time(t_philo *philo, t_philo_threads *philo_threads)
 void	ms_sleep(t_philo *philo, t_philo_threads *philo_threads, int x_time)
 {
 	long int	start;
+	t_philo		*philo_check;
 
+	if (philo)
+		philo_check = philo;
+	else if (philo_threads)
+		if (philo_threads->philo)
+			philo_check = philo_threads->philo;
 	start = return_actual_time(philo, philo_threads);
 	while (return_actual_time(philo, philo_threads) - start < x_time
-		&& stdout_open(philo_threads->philo) == 1)
-		usleep(50);
+		&& stdout_open(philo_check) == 1)
+		usleep(100);
 	return ;
 }

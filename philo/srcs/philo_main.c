@@ -2,9 +2,12 @@
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   philo_main.c                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
+/*                                                    +:+ +:+        
+	+:+     */
+/*   By: ifounas <ifounas@student.42.fr>            +#+  +:+      
+	+#+        */
+/*                                                +#+#+#+#+#+  
+	+#+           */
 /*   Created: 2025/07/21 11:22:22 by ifounas           #+#    #+#             */
 /*   Updated: 2025/07/21 11:22:22 by ifounas          ###   ########.fr       */
 /*                                                                            */
@@ -12,28 +15,16 @@
 
 #include "philo.h"
 
-void	error_msg(t_philo *philo, char *x_repeat)
+void	parsing(char **argv)
 {
-	int		ex;
-
-	ex = 0;
-	if (philo->nb_philo < 1)
+	str_is_digit(argv[1]);
+	str_is_digit(argv[2]);
+	str_is_digit(argv[3]);
+	str_is_digit(argv[4]);
+	if (argv[5])
 	{
-		write(2, "should have at least 1 philo\n", 29);
-		ex = 1;
+		str_is_digit(argv[5]);
 	}
-	if (philo->death_time < 0 || philo->eat_time < 0 || philo->sleep_time < 0)
-	{
-		write(2, "don't put negatifs numbers\n", 27);
-		ex = 1;
-	}
-	if (x_repeat && philo->x_repeat < 0)
-	{
-		write(2, "don't put negatifs numbers\n", 27);
-		ex = 1;
-	}
-	if (ex == 1)
-		exit(1);
 }
 
 int	main(int argc, char **argv)
@@ -47,6 +38,7 @@ int	main(int argc, char **argv)
 		printf("./philo nb_philo death_time eat_time sleep_time (nb_meals)\n");
 		return (0);
 	}
+	parsing(argv);
 	memset(&philo, 0, sizeof(t_philo));
 	memset(&philo.all_mutex, 0, sizeof(t_philo_mut));
 	philo_init(&philo, argv);

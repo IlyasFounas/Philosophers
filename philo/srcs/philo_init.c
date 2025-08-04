@@ -2,23 +2,19 @@
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   philo_init.c                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+        
-	+:+     */
-/*   By: ifounas <ifounas@student.42.fr>            +#+  +:+      
-	+#+        */
-/*                                                +#+#+#+#+#+  
-	+#+           */
-/*   Created: 2025/07/24 11:32:25 by ifounas           #+#    #+#             */
-/*   Updated: 2025/07/24 11:32:25 by ifounas          ###   ########.fr       */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/04 16:46:57 by ifounas           #+#    #+#             */
+/*   Updated: 2025/08/04 16:46:57 by ifounas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-
 void	philo_init_tab(t_philo *philo, t_philo_threads **philo_threads)
 {
-	int i;
+	int	i;
 
 	i = -1;
 	*philo_threads = malloc((philo->nb_philo) * sizeof(t_philo_threads));
@@ -37,12 +33,12 @@ void	philo_init_tab(t_philo *philo, t_philo_threads **philo_threads)
 
 void	philo_init_threads(t_philo *philo, t_philo_threads *philo_threads)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
 	i = -1;
 	j = -1;
-	// pthread_mutex_lock(&philo->all_mutex.start_simulation_mut);
+	pthread_mutex_lock(&philo->all_mutex.start_simulation_mut);
 	while (++i < philo->nb_philo)
 	{
 		if (pthread_create(&philo->philos[i], NULL, philo_threads_routine,
@@ -50,10 +46,14 @@ void	philo_init_threads(t_philo *philo, t_philo_threads *philo_threads)
 		{
 			while (--i >= 0)
 				pthread_join(philo->philos[i], NULL);
+			pthread_mutex_unlock(&philo->all_mutex.start_simulation_mut);
 			philo_free_all(philo, philo_threads);
 		}
 	}
-	// pthread_mutex_unlock(&philo->all_mutex.start_simulation_mut);
+	i = -1;
+	while (++i < philo->nb_philo)
+		philo_init_time(NULL, &philo_threads[i]);
+	pthread_mutex_unlock(&philo->all_mutex.start_simulation_mut);
 	philo_monitor(philo_threads);
 	while (++j < philo->nb_philo)
 		pthread_join(philo->philos[j], NULL);
@@ -61,7 +61,7 @@ void	philo_init_threads(t_philo *philo, t_philo_threads *philo_threads)
 
 void	philo_init_forks(t_philo *philo)
 {
-	int i;
+	int	i;
 
 	i = -1;
 	philo->forks_tab = malloc(philo->nb_philo * sizeof(int));
@@ -72,9 +72,27 @@ void	philo_init_forks(t_philo *philo)
 	return ;
 }
 
+void	str_is_digit(char *str)
+{
+	int	i;
+	int	y;
+
+	i = 0;
+	y = 0;
+	while (str[i] >= '0' && str[i] <= '9')
+		i++;
+	while (str[y])
+		y++;
+	if (i != y)
+	{
+		write(2, "only digits are allowed\n", 24);
+		exit(1);
+	}
+}
+
 void	philo_init(t_philo *philo, char **argv)
 {
-	int error;
+	int	error;
 
 	error = 0;
 	philo_init_time(philo, NULL);
@@ -83,12 +101,14 @@ void	philo_init(t_philo *philo, char **argv)
 	philo->eat_time = ft_atoi_ult(argv[3], &error);
 	philo->sleep_time = ft_atoi_ult(argv[4], &error);
 	if (argv[5])
+	{
 		philo->x_repeat = ft_atoi_ult(argv[5], &error);
+	}
 	else
 		philo->x_repeat = -1;
 	if (error == 1)
 	{
-		write(2, "long int overflow\n", 18);
+		write(2, "int overflow\n", 13);
 		exit(1);
 	}
 	error_msg(philo, argv[5]);

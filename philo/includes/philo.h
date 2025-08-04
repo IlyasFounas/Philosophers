@@ -6,7 +6,7 @@
 /*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 13:39:11 by ifounas           #+#    #+#             */
-/*   Updated: 2025/07/29 13:24:54 by ifounas          ###   ########.fr       */
+/*   Updated: 2025/08/04 16:51:40 by ifounas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,18 +70,19 @@ typedef struct s_philo_threads
 }					t_philo_threads;
 
 /*---------- philo_free --*/
+void				error_msg(t_philo *philo, char *x_repeat);
 void				philo_free_all(t_philo *philo,
 						t_philo_threads *philo_threads);
 
 /*---------- philo_init --*/
 void				philo_init_tab(t_philo *philo,
 						t_philo_threads **philo_threads);
+void				str_is_digit(char *str);
 void				philo_init(t_philo *philo, char **argv);
 void				philo_init_threads(t_philo *philo,
 						t_philo_threads *philo_threads);
 
 /*---------- philo_main --*/
-void				error_msg(t_philo *philo, char *x_repeat);
 
 /*---------- philo_process --*/
 void				philo_monitor(t_philo_threads *philo_threads);

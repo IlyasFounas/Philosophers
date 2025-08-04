@@ -2,19 +2,15 @@
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   philo_utils.c                                      :+:      :+:    :+:   */
-/*                                                    +:+ +:+
-	+:+     */
-/*   By: ifounas <ifounas@student.42.fr>            +#+  +:+
-	+#+        */
-/*                                                +#+#+#+#+#+
-	+#+           */
-/*   Created: 2025/07/28 11:42:05 by ifounas           #+#    #+#             */
-/*   Updated: 2025/07/28 11:42:05 by ifounas          ###   ########.fr       */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/04 16:57:59 by ifounas           #+#    #+#             */
+/*   Updated: 2025/08/04 16:57:59 by ifounas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
 
 static void	philo_simple_mutex(t_philo *philo)
 {
@@ -77,15 +73,15 @@ void	philo_init_mutex(t_philo *philo, int i)
 	{
 		if (pthread_mutex_init(&philo->all_mutex.forks[i], NULL) == -1)
 			mutex_init_failed(philo, i, 1);
-		if (pthread_mutex_init(&philo->all_mutex.last_eat_access[i], NULL) ==
-			-1)
+		if (pthread_mutex_init(&philo
+				->all_mutex.last_eat_access[i], NULL) == -1)
 			mutex_init_failed(philo, i, 0);
 	}
 }
 
 void	set_forks(t_philo_threads *philo_threads)
 {
-	int tmp;
+	int	tmp;
 
 	philo_threads->fork1 = philo_threads->thread_nb - 1;
 	philo_threads->fork2 = philo_threads->thread_nb
@@ -100,9 +96,9 @@ void	set_forks(t_philo_threads *philo_threads)
 
 long int	ft_atoi_ult(char *s, int *error)
 {
-	int i;
-	long int nb;
-	int neg;
+	int			i;
+	long int	nb;
+	int			neg;
 
 	i = 0;
 	nb = 0;
@@ -117,9 +113,9 @@ long int	ft_atoi_ult(char *s, int *error)
 	}
 	while (s[i] && (s[i] >= '0' && s[i] <= '9'))
 	{
-		if (nb > ((LLONG_MAX - (s[i] - 48)) / 10))
+		if (nb > ((INT_MAX - (s[i] - 48)) / 10))
 			*error = 1;
-		if (-nb < ((LLONG_MIN + (s[i] - 48)) / 10))
+		if (-nb < ((INT_MIN + (s[i] - 48)) / 10))
 			*error = 1;
 		nb = (nb * 10) + s[i] - 48;
 		i++;
