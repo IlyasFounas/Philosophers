@@ -79,6 +79,8 @@ void	str_is_digit(char *str)
 
 	i = 0;
 	y = 0;
+	if (str[0] == '-' || str[0] == '+')
+		i++;
 	while (str[i] >= '0' && str[i] <= '9')
 		i++;
 	while (str[y])

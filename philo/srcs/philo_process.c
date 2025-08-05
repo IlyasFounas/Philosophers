@@ -6,7 +6,7 @@
 /*   By: ifounas <ifounas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 16:07:27 by ifounas           #+#    #+#             */
-/*   Updated: 2025/08/04 16:55:03 by ifounas          ###   ########.fr       */
+/*   Updated: 2025/08/05 10:16:56 by ifounas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,14 +65,12 @@ void	philo_monitor(t_philo_threads *philo_threads)
 	int	i;
 	int	y;
 
-	i = -1;
+	i = 0;
 	y = -1;
 	pthread_mutex_lock(&philo_threads->philo->all_mutex.start_simulation_mut);
 	pthread_mutex_unlock(&philo_threads->philo->all_mutex.start_simulation_mut);
-	while (42 && ++i)
+	while (42)
 	{
-		if (i >= philo_threads->philo->nb_philo)
-			i = 0;
 		usleep(500);
 		if (philo_track_death(philo_threads, i) == 1)
 			return ;
@@ -86,6 +84,8 @@ void	philo_monitor(t_philo_threads *philo_threads)
 				&philo_threads->philo->all_mutex.stop_simulation_mut);
 			return ;
 		}
+		if (++i >= philo_threads->philo->nb_philo)
+			i = 0;
 	}
 }
 
